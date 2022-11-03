@@ -1,12 +1,27 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import "reflect-metadata";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ApolloServer } from "apollo-server-micro";
+import {
+  buildSchema,
+  Resolver,
+  Query,
+  Arg,
+  ObjectType,
+  Field,
+  ID,
+} from "type-graphql";
 // @ts-ignore
 import Cors from "micro-cors";
 
-import { schema } from "../../../graphql/schema";
-import { resolvers } from "../../../graphql/resolvers";
-import { createContext } from "../../../graphql/context";
+import { createContext } from "../../graphql/context";
+import { UserResolver } from "../../graphql/schema/user/resolver";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 const cors = Cors({
   origin: "https://studio.apollographql.com",
@@ -18,11 +33,16 @@ const cors = Cors({
     "content-type",
   ],
 });
+
+const schema = await buildSchema({
+  resolvers: [UserResolver],
+});
+
 const apolloServer = new ApolloServer({
   schema,
-  resolvers,
   context: createContext,
 });
+
 const startServer = apolloServer.start();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -36,12 +56,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await apolloServer.createHandler({
     path: "/api/graphql",
   })(req, res);
-};
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
 };
 
 export default cors(handler);

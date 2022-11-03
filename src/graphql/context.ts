@@ -1,10 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 
 import { prisma } from "../lib/prisma";
 
-export type Context = {
+export type MyContext = {
   prisma: PrismaClient;
+  session: Session | null;
 };
 
 export async function createContext({
@@ -13,8 +16,11 @@ export async function createContext({
 }: {
   req: NextApiRequest;
   res: NextApiResponse;
-}): Promise<Context> {
+}): Promise<MyContext> {
+  const session = await getSession({ req });
+
   return {
     prisma,
+    session,
   };
 }

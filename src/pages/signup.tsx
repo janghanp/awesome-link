@@ -55,7 +55,7 @@ const login = (props: PaperProps) => {
           my="lg"
         />
 
-        <LoginForm type="login" />
+        <LoginForm type="register" />
       </Paper>
     </Container>
   );

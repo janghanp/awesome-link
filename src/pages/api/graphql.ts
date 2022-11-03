@@ -2,15 +2,7 @@
 import "reflect-metadata";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ApolloServer } from "apollo-server-micro";
-import {
-  buildSchema,
-  Resolver,
-  Query,
-  Arg,
-  ObjectType,
-  Field,
-  ID,
-} from "type-graphql";
+import { buildSchema } from "type-graphql";
 // @ts-ignore
 import Cors from "micro-cors";
 

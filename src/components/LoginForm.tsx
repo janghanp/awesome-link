@@ -10,13 +10,26 @@ import { useForm } from "@mantine/form";
 import { upperFirst } from "@mantine/hooks";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { gql, useMutation } from "@apollo/client";
+
+const CREAT_USER = gql`
+  mutation Register($email: String!, $name: String!, $password: String!) {
+    register(email: $email, name: $name, password: $password) {
+      id
+      name
+      email
+    }
+  }
+`;
 
 type Props = {
   type: "login" | "register";
 };
 
 const LoginForm = ({ type }: Props) => {
+  const [signup, { data, loading, error }] = useMutation(CREAT_USER);
+
   const router = useRouter();
 
   const form = useForm({
@@ -36,8 +49,11 @@ const LoginForm = ({ type }: Props) => {
   });
 
   useEffect(() => {
-    //check if there is an error(an email is already in use) from next-auth and if there is one set an error to useForm.
-  }, []);
+    if (router.query.error) {
+      form.setFieldError("email", "Check your email again");
+      form.setFieldError("password", "Check your password again");
+    }
+  }, [router.query.error]);
 
   const clickHandler = () => {
     if (type === "login") {
@@ -49,17 +65,44 @@ const LoginForm = ({ type }: Props) => {
     }
   };
 
-  return (
-    <form
-      onSubmit={form.onSubmit(() => {
-        signIn("credentials", {
-          email: form.values.email,
-          name: form.values.name,
-          password: form.values.password,
-          callbackUrl: "/",
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    if (type === "login") {
+      e.preventDefault();
+
+      signIn("credentials", {
+        email: form.values.email,
+        password: form.values.password,
+        callbackUrl: "/",
+      });
+    }
+
+    if (type === "register") {
+      e.preventDefault();
+      const { email, name, password } = form.values;
+
+      const { errors } = form.validate();
+
+      if (Object.keys(errors).length > 0) {
+        console.log(errors);
+        return;
+      }
+
+      signup({ variables: { email, name, password } })
+        .then(() => {
+          signIn("credentials", {
+            email: form.values.email,
+            password: form.values.password,
+            callbackUrl: "/",
+          });
+        })
+        .catch((error) => {
+          form.setFieldError("email", error.message);
         });
-      })}
-    >
+    }
+  };
+
+  return (
+    <form onSubmit={submitHandler}>
       <Stack>
         {type === "register" && (
           <TextInput
@@ -80,7 +123,7 @@ const LoginForm = ({ type }: Props) => {
           onChange={(event) =>
             form.setFieldValue("email", event.currentTarget.value)
           }
-          error={form.errors.email && "Invalid email"}
+          error={form.errors.email && form.errors.email}
         />
 
         <PasswordInput

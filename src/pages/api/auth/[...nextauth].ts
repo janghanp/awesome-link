@@ -13,6 +13,7 @@ export default NextAuth({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     }),
+    //take about only signin
     CredentialsProvider({
       type: "credentials",
       name: "Credentials",
@@ -22,51 +23,27 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        if (credentials.name) {
-          //sign up
-          const user = await prisma.user.findUnique({
-            where: {
-              email: credentials.email,
-            },
-          });
+        //sign in
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+        });
 
-          //The given email is already in use.
-          if (user) {
-            //send a specific error to the client so that an error message can be shown on the client
-            //callbackurl to either /login or /signin
-            return null;
-          }
+        if (!user) {
+          console.log("No user found");
+          //No user found
+          return null;
+        }
 
-          const hashedPasswrod = await bcrypt.hash(credentials.password, 12);
+        const match = await bcrypt.compare(credentials.password, user.password);
 
-          const newUser = await prisma.user.create({
-            data: {
-              name: credentials.name,
-              email: credentials.email,
-              password: hashedPasswrod,
-            },
-          });
-
-          return newUser;
+        if (match) {
+          return user;
         } else {
-          //sign in
-          const user = await prisma.user.findUnique({
-            where: {
-              email: credentials.email,
-            },
-          });
-
-          const match = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
-
-          if (user && match) {
-            return user;
-          } else {
-            //implment situations that No user found or password dosen't match
-            return null;
-          }
+          console.log("password dose not match");
+          //Password dosen't match
+          return null;
         }
       },
     }),
@@ -74,10 +51,13 @@ export default NextAuth({
   session: {
     strategy: "jwt",
   },
+  secret: "supersecret",
   callbacks: {
     async session({ session, token }) {
-      //Add any aditional data to the session when loging in is successful.
       return session;
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      return token;
     },
   },
   pages: {

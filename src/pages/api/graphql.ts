@@ -1,10 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ApolloServer } from "apollo-server-micro";
+// @ts-ignore
 import Cors from "micro-cors";
 
-import { typeDefs } from "../../../graphql/schema";
+import { schema } from "../../../graphql/schema";
 import { resolvers } from "../../../graphql/resolvers";
+import { createContext } from "../../../graphql/context";
 
 const cors = Cors({
   origin: "https://studio.apollographql.com",
@@ -16,9 +18,11 @@ const cors = Cors({
     "content-type",
   ],
 });
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
-
-//so is it basically starting the graphql server everytime the api route gets a request?
+const apolloServer = new ApolloServer({
+  schema,
+  resolvers,
+  context: createContext,
+});
 const startServer = apolloServer.start();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -34,10 +38,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   })(req, res);
 };
 
-export default cors(handler);
-
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+
+export default cors(handler);

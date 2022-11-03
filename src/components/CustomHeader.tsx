@@ -9,9 +9,9 @@ import {
   Burger,
   Drawer,
   ScrollArea,
-  useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useRouter } from "next/router";
 
 import ToggleThemeButton from "./ToggleThemeButton";
 
@@ -85,7 +85,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function CustomHeader() {
-  // const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const router = useRouter();
 
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
@@ -96,12 +96,14 @@ export default function CustomHeader() {
     <Box pb={20}>
       <Header height={60} px="md">
         <Group position="apart" sx={{ height: "100%" }} px="lg">
-          <Text size="md" weight="500">
+          <Text size="md" weight="500" onClick={() => router.push("/")}>
             Awesome-link
           </Text>
 
           <Group className={classes.hiddenMobile}>
-            <Button variant="default">Log in</Button>
+            <Button variant="default" onClick={() => router.push("/login")}>
+              Log in
+            </Button>
             <Button>Sign up</Button>
             <ToggleThemeButton />
           </Group>
@@ -130,7 +132,12 @@ export default function CustomHeader() {
           />
 
           <Group position="center" grow pb="xl" px="md">
-            <Button variant="default">Log in</Button>
+            <Button variant="default" onClick={() => {
+              router.push('/login');
+              closeDrawer()
+            }}>
+              Log in
+            </Button>
             <Button>Sign up</Button>
           </Group>
         </ScrollArea>

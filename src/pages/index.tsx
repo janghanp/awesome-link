@@ -1,6 +1,4 @@
-import { Container, Text } from "@mantine/core";
-
-import LinkCard from "../components/LinkCard";
+import { Container } from "@mantine/core";
 
 export default function Home() {
   return (
@@ -11,14 +9,6 @@ export default function Home() {
         display: "flex",
         flexDirection: "column",
       }}
-    >
-      <LinkCard />
-      <LinkCard />
-      <LinkCard />
-      <LinkCard />
-      <LinkCard />
-      <LinkCard />
-      <LinkCard />
-    </Container>
+    ></Container>
   );
 }

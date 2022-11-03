@@ -3,12 +3,13 @@ import {
   Header,
   Group,
   Button,
-  Text,
   Divider,
   Box,
   Burger,
   Drawer,
   ScrollArea,
+  UnstyledButton,
+  Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/router";
@@ -96,15 +97,22 @@ export default function CustomHeader() {
     <Box pb={20}>
       <Header height={60} px="md">
         <Group position="apart" sx={{ height: "100%" }} px="lg">
-          <Text size="md" weight="500" onClick={() => router.push("/")}>
-            Awesome-link
-          </Text>
+          <UnstyledButton onClick={() => router.push("/")}>
+            <Text
+              size="md"
+              weight="800"
+              variant="gradient"
+              gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+            >
+              Awesome-link
+            </Text>
+          </UnstyledButton>
 
           <Group className={classes.hiddenMobile}>
             <Button variant="default" onClick={() => router.push("/login")}>
               Log in
             </Button>
-            <Button>Sign up</Button>
+            <Button onClick={() => router.push("/signup")}>Sign up</Button>
             <ToggleThemeButton />
           </Group>
 
@@ -132,13 +140,23 @@ export default function CustomHeader() {
           />
 
           <Group position="center" grow pb="xl" px="md">
-            <Button variant="default" onClick={() => {
-              router.push('/login');
-              closeDrawer()
-            }}>
+            <Button
+              variant="default"
+              onClick={() => {
+                router.push("/login");
+                closeDrawer();
+              }}
+            >
               Log in
             </Button>
-            <Button>Sign up</Button>
+            <Button
+              onClick={() => {
+                router.push("/signup");
+                closeDrawer();
+              }}
+            >
+              Sign up
+            </Button>
           </Group>
         </ScrollArea>
       </Drawer>

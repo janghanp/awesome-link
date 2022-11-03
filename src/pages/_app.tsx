@@ -10,7 +10,7 @@ import { SessionProvider } from "next-auth/react";
 
 import "../../styles/global.css";
 import Layout from "../components/Latyout";
-import apolloClient from "../../lib/apollo";
+import apolloClient from "../lib/apollo";
 
 export default function App({
   Component,

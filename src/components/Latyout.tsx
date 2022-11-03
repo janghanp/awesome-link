@@ -8,10 +8,14 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
 
   if (status === "loading") {
     return <div>loading...</div>;
+  }
+
+  if (status === "authenticated") {
+    console.log(session);
   }
 
   return (

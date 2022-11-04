@@ -25,10 +25,11 @@ const CREAT_USER = gql`
 
 type Props = {
   type: "login" | "register";
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const LoginForm = ({ type }: Props) => {
-  const [signup, { data, loading, error }] = useMutation(CREAT_USER);
+const LoginForm = ({ type, setVisible }: Props) => {
+  const [signup] = useMutation(CREAT_USER);
 
   const router = useRouter();
 
@@ -66,6 +67,8 @@ const LoginForm = ({ type }: Props) => {
   };
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    setVisible(true);
+
     if (type === "login") {
       e.preventDefault();
 
@@ -74,16 +77,20 @@ const LoginForm = ({ type }: Props) => {
         password: form.values.password,
         callbackUrl: "/",
       });
+
+      return;
     }
 
     if (type === "register") {
       e.preventDefault();
+
       const { email, name, password } = form.values;
 
       const { errors } = form.validate();
 
       if (Object.keys(errors).length > 0) {
         console.log(errors);
+        setVisible(false);
         return;
       }
 
@@ -97,7 +104,10 @@ const LoginForm = ({ type }: Props) => {
         })
         .catch((error) => {
           form.setFieldError("email", error.message);
+          setVisible(false);
         });
+
+      return;
     }
   };
 

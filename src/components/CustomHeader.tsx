@@ -10,11 +10,15 @@ import {
   ScrollArea,
   UnstyledButton,
   Text,
+  Avatar,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { IconLogout } from "@tabler/icons";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import ToggleThemeButton from "./ToggleThemeButton";
+import UserAvatar from "./UserAvatar";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -85,13 +89,20 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function CustomHeader() {
+const CustomHeader = () => {
   const router = useRouter();
+
+  const { data: session } = useSession();
 
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
 
   const { classes, theme } = useStyles();
+
+  const signOutHandler = () => {
+    signOut();
+    router.push("/");
+  };
 
   return (
     <Box pb={20}>
@@ -109,10 +120,17 @@ export default function CustomHeader() {
           </UnstyledButton>
 
           <Group className={classes.hiddenMobile}>
-            <Button variant="default" onClick={() => router.push("/login")}>
-              Log in
-            </Button>
-            <Button onClick={() => router.push("/signup")}>Sign up</Button>
+            {session ? (
+              <UserAvatar image={session.user.image} name={session.user.name} />
+            ) : (
+              <>
+                <Button variant="default" onClick={() => router.push("/login")}>
+                  Log in
+                </Button>
+                <Button onClick={() => router.push("/signup")}>Sign up</Button>
+              </>
+            )}
+
             <ToggleThemeButton />
           </Group>
 
@@ -125,11 +143,12 @@ export default function CustomHeader() {
       </Header>
 
       <Drawer
+        styles={{ header: { margin: "0px" } }}
         opened={drawerOpened}
         onClose={closeDrawer}
         size="100%"
         padding="md"
-        title="Awesome-link"
+        title={<Avatar radius="xl" src={session?.user.image} />}
         className={classes.hiddenDesktop}
         zIndex={1000000}
       >
@@ -140,26 +159,39 @@ export default function CustomHeader() {
           />
 
           <Group position="center" grow pb="xl" px="md">
-            <Button
-              variant="default"
-              onClick={() => {
-                router.push("/login");
-                closeDrawer();
-              }}
-            >
-              Log in
-            </Button>
-            <Button
-              onClick={() => {
-                router.push("/signup");
-                closeDrawer();
-              }}
-            >
-              Sign up
-            </Button>
+            {session ? (
+              <Button onClick={signOutHandler}>
+                <Group>
+                  <IconLogout size={18} />
+                  <Text size="md">Log out</Text>
+                </Group>
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="default"
+                  onClick={() => {
+                    router.push("/login");
+                    closeDrawer();
+                  }}
+                >
+                  Log in
+                </Button>
+                <Button
+                  onClick={() => {
+                    router.push("/signup");
+                    closeDrawer();
+                  }}
+                >
+                  Sign up
+                </Button>
+              </>
+            )}
           </Group>
         </ScrollArea>
       </Drawer>
     </Box>
   );
-}
+};
+
+export default CustomHeader;

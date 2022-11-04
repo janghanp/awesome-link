@@ -14,8 +14,9 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLogout } from "@tabler/icons";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useCurrentUserState } from "../store";
 
 import ToggleThemeButton from "./ToggleThemeButton";
 import UserAvatar from "./UserAvatar";
@@ -92,7 +93,7 @@ const useStyles = createStyles((theme) => ({
 const CustomHeader = () => {
   const router = useRouter();
 
-  const { data: session } = useSession();
+  const currentUser = useCurrentUserState((state) => state.currentUser);
 
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
@@ -120,8 +121,8 @@ const CustomHeader = () => {
           </UnstyledButton>
 
           <Group className={classes.hiddenMobile}>
-            {session ? (
-              <UserAvatar image={session.user.image} name={session.user.name} />
+            {currentUser ? (
+              <UserAvatar image={currentUser.image} name={currentUser.name} />
             ) : (
               <>
                 <Button variant="default" onClick={() => router.push("/login")}>
@@ -148,7 +149,7 @@ const CustomHeader = () => {
         onClose={closeDrawer}
         size="100%"
         padding="md"
-        title={<Avatar radius="xl" src={session?.user.image} />}
+        title={<Avatar radius="xl" src={currentUser.image} />}
         className={classes.hiddenDesktop}
         zIndex={1000000}
       >
@@ -159,7 +160,7 @@ const CustomHeader = () => {
           />
 
           <Group position="center" grow pb="xl" px="md">
-            {session ? (
+            {currentUser ? (
               <Button onClick={signOutHandler}>
                 <Group>
                   <IconLogout size={18} />

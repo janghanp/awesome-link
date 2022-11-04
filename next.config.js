@@ -8,7 +8,17 @@ const nextConfig = {
     }
     config.experiments.topLevelAwait = true;
     return config;
-  }
-}
+  },
+  experimental: {
+    swcPlugins: [
+      [
+        "next-superjson-plugin",
+        {
+          excluded: [],
+        },
+      ],
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -53,6 +53,7 @@ model User {
   email         String    @unique @db.VarChar(255)
   password      String?   @db.VarChar(255)
   image         String?   @db.VarChar(255)
+  public_id     String?   @db.VarChar(255)
   role          Role      @default(USER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt

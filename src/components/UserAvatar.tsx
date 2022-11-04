@@ -2,6 +2,7 @@ import { Menu, Avatar, UnstyledButton, Divider, Text } from "@mantine/core";
 import { IconLogout, IconSettings } from "@tabler/icons";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useCurrentUserState } from "../store";
 
 type Props = {
   image?: string;
@@ -11,8 +12,11 @@ type Props = {
 const UserAvatar = ({ image, name }: Props) => {
   const router = useRouter();
 
+  const setCurrentUser = useCurrentUserState((state) => state.setCurrentUser);
+
   const signOutHandler = () => {
     signOut();
+    setCurrentUser(null);
     router.push("/");
   };
 

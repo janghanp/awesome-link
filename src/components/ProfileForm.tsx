@@ -1,16 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 import { User } from "@prisma/client";
 import { useCurrentUserState } from "../store";
+import { gql } from "apollo-server-micro";
+import { useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
+
+const UPDATE_USER_INFO = gql`
+  mutation UpdateUserInfo($email: String!, $name: String!) {
+    updateUserInfo(email: $email, name: $name) {
+      id
+      name
+      email
+      image
+      role
+    }
+  }
+`;
+
+interface UpdateUserInfo {
+  updateUserInfo: User;
+}
 
 type Props = {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ProfileForm = ({ setVisible }: Props) => {
-  const currentUser = useCurrentUserState((state) => state.currentUser);
+  const router = useRouter();
+
+  const [updateUserInfo] = useMutation<UpdateUserInfo>(UPDATE_USER_INFO);
+
+  const { currentUser, setCurrentUser } = useCurrentUserState();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -19,10 +44,18 @@ const ProfileForm = ({ setVisible }: Props) => {
     },
   });
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsLoading(true);
+
     e.preventDefault();
 
-    console.log(form.values);
+    const response = await updateUserInfo({
+      variables: { email: currentUser.email, name: form.values.name },
+    });
+
+    setCurrentUser(response.data.updateUserInfo);
+
+    router.push("/");
   };
 
   return (
@@ -45,23 +78,9 @@ const ProfileForm = ({ setVisible }: Props) => {
           }
           error={form.errors.email && form.errors.email}
         />
-
-        {/* <PasswordInput
-          required
-          label="Password"
-          placeholder="Your password"
-          value={form.values.password}
-          onChange={(event) =>
-            form.setFieldValue("password", event.currentTarget.value)
-          }
-          error={
-            form.errors.password &&
-            "Password should include at least 6 characters"
-          }
-        /> */}
       </Stack>
 
-      <Button type="submit" mt="lg">
+      <Button loading={isLoading} type="submit" mt="lg">
         Update
       </Button>
     </form>

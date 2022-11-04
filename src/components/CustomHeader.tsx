@@ -149,7 +149,9 @@ const CustomHeader = () => {
         onClose={closeDrawer}
         size="100%"
         padding="md"
-        title={<Avatar radius="xl" src={currentUser.image} />}
+        title={
+          currentUser ? <Avatar radius="xl" src={currentUser.image} /> : ""
+        }
         className={classes.hiddenDesktop}
         zIndex={1000000}
       >

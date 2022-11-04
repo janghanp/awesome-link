@@ -4,39 +4,27 @@ import { getToken } from "next-auth/jwt";
 import { useState } from "react";
 
 import ProfileForm from "../components/ProfileForm";
-// import { prisma } from "../lib/prisma";
-// import { User } from "@prisma/client";
 import ProfileAvatar from "../components/ProfileAvatar";
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const jwt = await getToken({
-//     req: context.req,
-//     secret: process.env.JWT_SECRET,
-//   });
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const jwt = await getToken({
+    req: context.req,
+    secret: process.env.JWT_SECRET,
+  });
 
-//   if (!jwt) {
-//     return {
-//       redirect: {
-//         destination: "/login",
-//         permanent: false,
-//       },
-//     };
-//   }
+  if (!jwt) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
 
-//   const user = await prisma.user.findUnique({
-//     where: {
-//       email: jwt.email,
-//     },
-//   });
-
-//   return {
-//     props: { user },
-//   };
-// };
-
-// type Props = {
-//   user: User;
-// };
+  return {
+    props: {},
+  };
+};
 
 const Settings = () => {
   const [visible, setVisible] = useState<boolean>(false);

@@ -1,8 +1,9 @@
-import { Avatar, LoadingOverlay } from "@mantine/core";
+import { Avatar, ActionIcon } from "@mantine/core";
 import { gql, useMutation } from "@apollo/client";
 import { ChangeEvent, useRef, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import { IconPencil } from "@tabler/icons";
 
 import { User } from "@prisma/client";
 import { useCurrentUserState } from "../store";
@@ -32,12 +33,13 @@ const ProfileAvatar = () => {
 
   const { currentUser, setCurrentUser } = useCurrentUserState();
 
-  const [file, setFile] = useState<File | null>();
   const [previewImage, setPreviewImage] = useState<string>("");
-  const [visible, setVisible] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const changeFileHandler = async (e: ChangeEvent<HTMLInputElement>) => {
-    setVisible(true);
+    setIsLoading(true);
 
     const file = e.target.files[0];
 
@@ -45,14 +47,13 @@ const ProfileAvatar = () => {
     if (file.size > 1_500_000) {
       toast.error("Image size should be less than 1.5MB");
       setPreviewImage("");
-      setVisible(false);
+      setIsLoading(false);
       return;
     }
 
     const reader = new FileReader();
 
     reader.onload = () => {
-      setFile(file);
       setPreviewImage(reader.result as string);
     };
 
@@ -83,22 +84,29 @@ const ProfileAvatar = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setVisible(false);
+      setIsLoading(false);
     }
   };
 
   return (
     <>
       <div style={{ width: 58, position: "relative" }}>
-        <LoadingOverlay
-          loaderProps={{ size: "sm", variant: "oval", color: "dark" }}
-          visible={visible}
-          overlayBlur={2}
-        />
         <Avatar src={previewImage || currentUser.image} size="lg" radius="xl" />
+        <div style={{ position: "absolute", top: "30px", right: "-30px" }}>
+          <ActionIcon
+            size="md"
+            variant="gradient"
+            loading={isLoading}
+            onClick={() => inputRef.current.click()}
+          >
+            <IconPencil size={17} />
+          </ActionIcon>
+        </div>
       </div>
 
       <input
+        hidden
+        ref={inputRef}
         type="file"
         id="file-upload"
         accept=".jpeg, .jpg, .png"

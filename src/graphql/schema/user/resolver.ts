@@ -18,8 +18,8 @@ export class UserResolver {
   async getUser(@Arg("email") email: string) {
     return await prisma.user.findUnique({
       where: {
-        email
-      }
+        email,
+      },
     });
   }
 
@@ -84,6 +84,23 @@ export class UserResolver {
       const result = await cloudinary.v2.uploader.destroy(user.public_id);
       console.log(result);
     }
+
+    return newUser;
+  }
+
+  @Mutation(() => User)
+  async updateUserInfo(
+    @Arg("email") email: string,
+    @Arg("name") name: string
+  ): Promise<UserPrisma> {
+    const newUser = await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        name,
+      },
+    });
 
     return newUser;
   }

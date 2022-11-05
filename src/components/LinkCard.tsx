@@ -1,32 +1,130 @@
-import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
+import {
+  createStyles,
+  Card,
+  Image,
+  Text,
+  AspectRatio,
+  ActionIcon,
+  Group,
+  LoadingOverlay,
+} from "@mantine/core";
+import React, { useState } from "react";
+import { IconBookmark } from "@tabler/icons";
+import { gql, useMutation } from "@apollo/client";
+import toast, { Toaster } from "react-hot-toast";
 
-const LinkCard = () => {
+import { useCurrentUserState } from "../store";
+import ControlMenu from "./ControlMenu";
+import { useRouter } from "next/router";
+import { decodeBase64 } from "bcryptjs";
+
+const useStyles = createStyles((theme) => ({
+  card: {
+    transition: "transform 150ms ease, box-shadow 150ms ease",
+
+    "&:hover": {
+      transform: "scale(1.01)",
+      boxShadow: theme.shadows.md,
+    },
+  },
+
+  title: {
+    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+    fontWeight: 600,
+  },
+}));
+
+const DELETE_LINK = gql`
+  mutation DeleteLink($id: String!, $public_id: String!) {
+    deleteLink(id: $id, public_id: $public_id) {
+      id
+    }
+  }
+`;
+
+type Props = {
+  id: number;
+  title: string;
+  description: string;
+  link: string;
+  imageUrl: string;
+  public_id: string;
+  refetch: () => {};
+};
+
+const LinkCard = ({
+  title,
+  description,
+  link,
+  imageUrl,
+  public_id,
+  id,
+}: Props) => {
+  const { classes, theme } = useStyles();
+
+  const router = useRouter();
+
+  const [deleteLink] = useMutation(DELETE_LINK);
+
+  const currentUser = useCurrentUserState((state) => state.currentUser);
+
+  const [visible, setVisible] = useState<boolean>(false);
+
+  const bookmarkHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log("bookmark");
+  };
+
+  const deleteLinkHandler = async (
+    cb: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setVisible(true);
+
+    await deleteLink({ variables: { id, public_id } });
+
+    setVisible(false);
+    toast.success("Successfully deleted!");
+    cb(false);
+  };
+
   return (
-    <Card shadow="sm" p="lg" radius="md" withBorder style={{maxWidth: "330px"}}>
-      <Card.Section>
-        <Image
-          src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-          height={160}
-          alt="Norway"
-        />
-      </Card.Section>
+    <>
+      <LoadingOverlay visible={visible} overlayBlur={2} />
 
-      <Group position="apart" mt="md" mb="xs">
-        <Text weight={500}>Norway Fjord Adventures</Text>
-        <Badge color="pink" variant="light">
-          On Sale
-        </Badge>
-      </Group>
+      <Card
+        p="md"
+        radius="md"
+        component="a"
+        href={link}
+        className={classes.card}
+        withBorder
+        style={{ minWidth: "400px" }}
+      >
+        {currentUser && currentUser.role === "ADMIN" && (
+          <Group position="right" mb={5} onClick={(e) => e.preventDefault()}>
+            <ControlMenu deleteLinkHandler={deleteLinkHandler} />
+          </Group>
+        )}
 
-      <Text size="sm" color="dimmed">
-        With Fjord Tours you can explore more of the magical fjord landscapes
-        with tours and activities on and around the fjords of Norway
-      </Text>
+        <AspectRatio ratio={1920 / 1080}>
+          <Image src={imageUrl} />
+        </AspectRatio>
+        <Text mt={20} className={classes.title}>
+          {title}
+        </Text>
+        <Group position="right">
+          <ActionIcon onClick={bookmarkHandler}>
+            <IconBookmark
+              size={18}
+              color={theme.colors.yellow[6]}
+              stroke={1.5}
+            />
+          </ActionIcon>
+        </Group>
+      </Card>
 
-      <Button variant="light" color="blue" fullWidth mt="md" radius="md">
-        Book classic tour now
-      </Button>
-    </Card>
+      <Toaster />
+    </>
   );
 };
 

@@ -111,7 +111,7 @@ const CreateLinkForm = () => {
         console.log(error);
       });
 
-    router.push("/");
+    router.push('/');
   };
 
   return (

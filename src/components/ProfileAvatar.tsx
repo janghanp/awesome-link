@@ -44,8 +44,8 @@ const ProfileAvatar = () => {
     const file = e.target.files[0];
 
     // check file size
-    if (file.size > 1_500_000) {
-      toast.error("Image size should be less than 1.5MB");
+    if (file.size > 1_000_000) {
+      toast.error("Image size should be less than 1MB");
       setPreviewImage("");
       setIsLoading(false);
       return;
@@ -83,6 +83,7 @@ const ProfileAvatar = () => {
       toast.success("Profile has been updated!");
     } catch (error) {
       console.log(error);
+      toast.error("Something went please try again...");
     } finally {
       setIsLoading(false);
     }

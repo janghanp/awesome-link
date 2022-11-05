@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useMutation, gql } from "@apollo/client";
+import { useRouter } from "next/router";
 
 import { User } from "@prisma/client";
 import { useCurrentUserState } from "../store";
-import { gql } from "apollo-server-micro";
-import { useMutation } from "@apollo/client";
-import { useRouter } from "next/router";
 
 const UPDATE_USER_INFO = gql`
   mutation UpdateUserInfo($email: String!, $name: String!) {

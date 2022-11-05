@@ -44,7 +44,7 @@ export default function Layout({ children }: Props) {
   }, [data]);
 
   if (status === "loading" || (session && !currentUser)) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   return (

@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, } from "@apollo/client";
 import {
   Button,
   Stack,
@@ -12,6 +12,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { GET_LINKS } from '../components/LinkCardList';
 
 const CREATE_LINK = gql`
   mutation CreateLink(
@@ -40,9 +41,14 @@ const CREATE_LINK = gql`
 const CreateLinkForm = () => {
   const router = useRouter();
 
-  const [createLink] = useMutation(CREATE_LINK);
+  const [createLink] = useMutation(CREATE_LINK, {
+    refetchQueries: [
+      { query: GET_LINKS },
+    ]
+  });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
 
   const form = useForm({
@@ -73,15 +79,23 @@ const CreateLinkForm = () => {
         formData
       );
 
+      setIsImageUploading(true);
+
       toast.promise(promise, {
         loading: "Uploading...",
         success: ({ data }) => {
           form.setFieldValue("public_id", data.public_id);
           form.setFieldValue("secure_url", data.secure_url);
 
+          setIsImageUploading(false);
+
           return "Image uploaded successfully!";
         },
-        error: "Please try again...",
+        error: () => {
+          setIsImageUploading(false);
+
+          return "Please try again..."
+        },
       });
     };
 
@@ -104,8 +118,9 @@ const CreateLinkForm = () => {
         public_id: form.values.public_id,
       },
     })
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
+        //refetech here?
       })
       .catch((error) => {
         console.log(error);
@@ -159,7 +174,7 @@ const CreateLinkForm = () => {
           />
         </Stack>
 
-        <Button type="submit" mt="lg">
+        <Button loading={isImageUploading} type="submit" mt="lg">
           Create
         </Button>
       </form>

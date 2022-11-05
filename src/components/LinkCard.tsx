@@ -15,8 +15,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { useCurrentUserState } from "../store";
 import ControlMenu from "./ControlMenu";
-import { useRouter } from "next/router";
-import { decodeBase64 } from "bcryptjs";
+import { GET_LINKS } from "./LinkCardList";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -49,7 +48,6 @@ type Props = {
   link: string;
   imageUrl: string;
   public_id: string;
-  refetch: () => {};
 };
 
 const LinkCard = ({
@@ -62,9 +60,9 @@ const LinkCard = ({
 }: Props) => {
   const { classes, theme } = useStyles();
 
-  const router = useRouter();
-
-  const [deleteLink] = useMutation(DELETE_LINK);
+  const [deleteLink] = useMutation(DELETE_LINK, {
+    refetchQueries: [{ query: GET_LINKS }],
+  });
 
   const currentUser = useCurrentUserState((state) => state.currentUser);
 
@@ -98,7 +96,7 @@ const LinkCard = ({
         href={link}
         className={classes.card}
         withBorder
-        style={{ minWidth: "400px" }}
+        style={{ minWidth: "300px" }}
       >
         {currentUser && currentUser.role === "ADMIN" && (
           <Group position="right" mb={5} onClick={(e) => e.preventDefault()}>

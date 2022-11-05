@@ -1,9 +1,9 @@
 import { gql, useQuery } from "@apollo/client";
-import { SimpleGrid, Container } from "@mantine/core";
+import { SimpleGrid, Container, Skeleton } from "@mantine/core";
 import { Link } from "@prisma/client";
 import LinkCard from "./LinkCard";
 
-const GET_LINKS = gql`
+export const GET_LINKS = gql`
   query GetLinks {
     getLinks {
       id
@@ -21,29 +21,32 @@ interface LinksData {
 }
 
 const LinkCardList = () => {
-  const { loading, data, error, refetch } = useQuery<LinksData>(GET_LINKS);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const { loading, data, error } = useQuery<LinksData>(GET_LINKS);
 
   return (
     <Container py="xl">
-      <SimpleGrid cols={2} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
-        {data.getLinks.map((link) => {
-          return (
-            <LinkCard
-              key={link.id}
-              id={link.id}
-              title={link.title}
-              description={link.description}
-              link={link.url}
-              imageUrl={link.imageUrl}
-              public_id={link.public_id}
-              refetch={refetch}
-            />
-          );
-        })}
+      <SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+        {loading && !data ? (
+          <>
+            {Array.from({ length: 7 }).map(() => (
+              <Skeleton height="300px" width="300px" mb="xl" radius="md" />
+            ))}
+          </>
+        ) : (
+          data.getLinks.map((link) => {
+            return (
+              <LinkCard
+                key={link.id}
+                id={link.id}
+                title={link.title}
+                description={link.description}
+                link={link.url}
+                imageUrl={link.imageUrl}
+                public_id={link.public_id}
+              />
+            );
+          })
+        )}
       </SimpleGrid>
     </Container>
   );

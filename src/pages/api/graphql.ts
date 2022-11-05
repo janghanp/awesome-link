@@ -8,6 +8,7 @@ import Cors from "micro-cors";
 
 import { createContext } from "../../graphql/context";
 import { UserResolver } from "../../graphql/schema/user/resolver";
+import { LinkResolver } from "../../graphql/schema/link/resovler";
 
 export const config = {
   api: {
@@ -27,7 +28,7 @@ const cors = Cors({
 });
 
 const schema = await buildSchema({
-  resolvers: [UserResolver],
+  resolvers: [UserResolver, LinkResolver],
 });
 
 const apolloServer = new ApolloServer({

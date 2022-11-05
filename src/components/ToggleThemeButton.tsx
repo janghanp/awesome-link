@@ -11,6 +11,7 @@ const ToggleThemeButton = () => {
       color={dark ? "yellow" : "blue"}
       onClick={() => toggleColorScheme()}
       title="Toggle color scheme"
+      mr="md"
     >
       {dark ? <IconSun size={18} /> : <IconMoonStars size={18} />}
     </ActionIcon>

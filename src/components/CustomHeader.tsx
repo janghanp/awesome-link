@@ -121,18 +121,28 @@ const CustomHeader = () => {
           </UnstyledButton>
 
           <Group className={classes.hiddenMobile}>
+            <ToggleThemeButton />
+
+            {currentUser && currentUser.role === "ADMIN" && (
+              <Button
+                onClick={() => router.push("/admin")}
+                size="sm"
+                variant="filled"
+              >
+                Create Link
+              </Button>
+            )}
+
             {currentUser ? (
               <UserAvatar image={currentUser.image} name={currentUser.name} />
             ) : (
               <>
-                <Button variant="default" onClick={() => router.push("/login")}>
+                <Button variant="outline" onClick={() => router.push("/login")}>
                   Log in
                 </Button>
                 <Button onClick={() => router.push("/signup")}>Sign up</Button>
               </>
             )}
-
-            <ToggleThemeButton />
           </Group>
 
           <Burger
@@ -172,7 +182,7 @@ const CustomHeader = () => {
             ) : (
               <>
                 <Button
-                  variant="default"
+                  variant="outline"
                   onClick={() => {
                     router.push("/login");
                     closeDrawer();

@@ -74,7 +74,7 @@ model Link {
   description String   @db.VarChar(255)
   url         String   @db.VarChar(255)
   imageUrl    String   @db.VarChar(255)
-  category    String   @db.VarChar(255)
+  public_id   String   @db.VarChar(255)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   users       User[]

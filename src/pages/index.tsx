@@ -1,5 +1,7 @@
 import { Container } from "@mantine/core";
 
+import LinkCardList from "../components/LinkCardList";
+
 export default function Home() {
   return (
     <Container
@@ -8,6 +10,8 @@ export default function Home() {
         display: "flex",
         flexDirection: "column",
       }}
-    ></Container>
+    >
+      <LinkCardList />
+    </Container>
   );
 }

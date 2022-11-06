@@ -1,8 +1,8 @@
-import { Menu, Avatar, UnstyledButton, Divider, Text } from "@mantine/core";
-import { IconLogout, IconSettings } from "@tabler/icons";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useCurrentUserState } from "../store";
+import { Menu, Avatar, UnstyledButton, Divider, Text } from '@mantine/core';
+import { IconLogout, IconSettings } from '@tabler/icons';
+import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useCurrentUserState } from '../store';
 
 type Props = {
   image?: string;
@@ -17,11 +17,11 @@ const UserAvatar = ({ image, name }: Props) => {
   const signOutHandler = () => {
     signOut();
     setCurrentUser(null);
-    router.push("/");
+    router.push('/');
   };
 
   const settingsHandler = () => {
-    router.push("/settings");
+    router.push('/settings');
   };
 
   return (
@@ -55,5 +55,5 @@ const UserAvatar = ({ image, name }: Props) => {
 
 export default UserAvatar;
 function useStyles(): { classes: any; theme: any } {
-  throw new Error("Function not implemented.");
+  throw new Error('Function not implemented.');
 }

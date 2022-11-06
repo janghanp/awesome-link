@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import { Paper } from "@mantine/core";
-import { useSession } from "next-auth/react";
-import { gql, useQuery } from "@apollo/client";
+import { useEffect } from 'react';
+import { Paper } from '@mantine/core';
+import { useSession } from 'next-auth/react';
+import { gql, useQuery } from '@apollo/client';
 
-import CustomHeader from "./CustomHeader";
-import { useCurrentUserState } from "../store";
-import { User } from "@prisma/client";
+import CustomHeader from './CustomHeader';
+import { useCurrentUserState } from '../store';
+import { User } from '@prisma/client';
 
 const GET_USER = gql`
   query User($email: String!) {
@@ -41,9 +41,9 @@ export default function Layout({ children }: Props) {
     if (data) {
       setCurrentUser(data.getUser);
     }
-  }, [data]);
+  }, [data, setCurrentUser]);
 
-  if (status === "loading" || (session && !currentUser)) {
+  if (status === 'loading' || (session && !currentUser)) {
     return <div></div>;
   }
 

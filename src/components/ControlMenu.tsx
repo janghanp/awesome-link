@@ -1,22 +1,13 @@
-import {
-  Menu,
-  ActionIcon,
-  Modal,
-  Divider,
-  Text,
-  Group,
-  Button,
-} from "@mantine/core";
-import { IconTrash, IconEdit, IconDots } from "@tabler/icons";
-import { useState } from "react";
+import { Menu, ActionIcon, Modal, Divider, Text, Group, Button } from '@mantine/core';
+import { IconTrash, IconEdit, IconDots } from '@tabler/icons';
+import { useState } from 'react';
 
 type Props = {
-  deleteLinkHandler: (
-    cb: React.Dispatch<React.SetStateAction<boolean>>
-  ) => void;
+  deleteLinkHandler: (cb: React.Dispatch<React.SetStateAction<boolean>>) => void;
+  editLinkHandler: () => void;
 };
 
-const ControlMenu = ({ deleteLinkHandler }: Props) => {
+const ControlMenu = ({ deleteLinkHandler, editLinkHandler }: Props) => {
   const [opened, setOpened] = useState<boolean>(false);
 
   return (
@@ -24,14 +15,18 @@ const ControlMenu = ({ deleteLinkHandler }: Props) => {
       <Menu shadow="md" width={200} position="bottom-end">
         <Menu.Target>
           <ActionIcon>
-            <IconDots color="gray" />
+            <IconDots />
           </ActionIcon>
         </Menu.Target>
 
         <Menu.Dropdown>
-          <Menu.Item icon={<IconEdit size={14} />}>Edit</Menu.Item>
+          <Menu.Item onClick={editLinkHandler} icon={<IconEdit size={14} />}>
+            Edit
+          </Menu.Item>
           <Menu.Item
-            onClick={() => setOpened(true)}
+            onClick={() => {
+              setOpened(true);
+            }}
             icon={<IconTrash size={14} />}
           >
             Delete
@@ -44,7 +39,7 @@ const ControlMenu = ({ deleteLinkHandler }: Props) => {
         onClose={() => setOpened(false)}
         withCloseButton={false}
         title="Confirmation"
-        styles={{ title: { fontWeight: "bold", fontSize: "18px" } }}
+        styles={{ title: { fontWeight: 'bold', fontSize: '18px' } }}
       >
         <Divider />
         <Text weight="600" color="gray" my="md">

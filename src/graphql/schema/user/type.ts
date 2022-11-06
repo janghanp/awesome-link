@@ -1,24 +1,24 @@
-import { ObjectType, Field, ID, registerEnumType } from "type-graphql";
+import { ObjectType, Field, ID, registerEnumType } from 'type-graphql';
 
 enum Role {
-  ADMIN = "ADMIN",
-  USER = "USER",
+  ADMIN = 'ADMIN',
+  USER = 'USER',
 }
 
 registerEnumType(Role, {
-  name: "Role",
-  description: "The type of roles",
+  name: 'Role',
+  description: 'The type of roles',
   valuesConfig: {
     ADMIN: {
-      description: "Admin",
+      description: 'Admin',
     },
     USER: {
-      description: "User",
+      description: 'User',
     },
   },
 });
 
-@ObjectType({ description: "The user model" })
+@ObjectType({ description: 'The user model' })
 export class User {
   @Field((_type) => ID)
   id!: number;

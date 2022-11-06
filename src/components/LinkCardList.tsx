@@ -1,7 +1,7 @@
-import { gql, useQuery } from "@apollo/client";
-import { SimpleGrid, Container, Skeleton } from "@mantine/core";
-import { Link } from "@prisma/client";
-import LinkCard from "./LinkCard";
+import { gql, useQuery } from '@apollo/client';
+import { SimpleGrid, Container, Skeleton } from '@mantine/core';
+import { Link } from '@prisma/client';
+import LinkCard from './LinkCard';
 
 export const GET_LINKS = gql`
   query GetLinks {
@@ -21,15 +21,15 @@ interface LinksData {
 }
 
 const LinkCardList = () => {
-  const { loading, data, error } = useQuery<LinksData>(GET_LINKS);
+  const { loading, data } = useQuery<LinksData>(GET_LINKS);
 
   return (
     <Container py="xl">
-      <SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+      <SimpleGrid className="grid" cols={3} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
         {loading && !data ? (
           <>
-            {Array.from({ length: 7 }).map(() => (
-              <Skeleton height="300px" width="300px" mb="xl" radius="md" />
+            {Array.from({ length: 7 }).map((_, index) => (
+              <Skeleton key={index} height={400} width="300px" mb="xl" radius="md" />
             ))}
           </>
         ) : (
@@ -37,12 +37,13 @@ const LinkCardList = () => {
             return (
               <LinkCard
                 key={link.id}
-                id={link.id}
-                title={link.title}
-                description={link.description}
-                link={link.url}
-                imageUrl={link.imageUrl}
-                public_id={link.public_id}
+                link={link}
+                // id={link.id}
+                // title={link.title}
+                // description={link.description}
+                // link={link.url}
+                // imageUrl={link.imageUrl}
+                // public_id={link.public_id}
               />
             );
           })

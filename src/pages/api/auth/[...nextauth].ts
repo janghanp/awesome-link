@@ -1,10 +1,10 @@
-import NextAuth from "next-auth";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import GithubProvider from "next-auth/providers/github";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
+import NextAuth from 'next-auth';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import GithubProvider from 'next-auth/providers/github';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import bcrypt from 'bcryptjs';
 
-import { prisma } from "../../../lib/prisma";
+import { prisma } from '../../../lib/prisma';
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -15,12 +15,12 @@ export default NextAuth({
     }),
     //take about only signin
     CredentialsProvider({
-      type: "credentials",
-      name: "Credentials",
+      type: 'credentials',
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "test@test.com" },
-        name: { label: "Name", type: "text", placeholder: "James" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'text', placeholder: 'test@test.com' },
+        name: { label: 'Name', type: 'text', placeholder: 'James' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
         //sign in
@@ -31,7 +31,7 @@ export default NextAuth({
         });
 
         if (!user) {
-          console.log("No user found");
+          console.log('No user found');
           //No user found
           return null;
         }
@@ -41,7 +41,7 @@ export default NextAuth({
         if (match) {
           return user;
         } else {
-          console.log("password dose not match");
+          console.log('password dose not match');
           //Password dosen't match
           return null;
         }
@@ -49,7 +49,7 @@ export default NextAuth({
     }),
   ],
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   secret: process.env.JWT_SECRET,
   callbacks: {
@@ -61,6 +61,6 @@ export default NextAuth({
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
 });

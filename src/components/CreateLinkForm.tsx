@@ -1,17 +1,12 @@
-import { gql, useMutation, } from "@apollo/client";
-import {
-  Button,
-  Stack,
-  TextInput,
-  FileInput,
-  LoadingOverlay,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { IconUpload } from "@tabler/icons";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { gql, useMutation } from '@apollo/client';
+import { Button, Stack, TextInput, FileInput, LoadingOverlay } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconUpload } from '@tabler/icons';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
 import { GET_LINKS } from '../components/LinkCardList';
 
 const CREATE_LINK = gql`
@@ -42,9 +37,7 @@ const CreateLinkForm = () => {
   const router = useRouter();
 
   const [createLink] = useMutation(CREATE_LINK, {
-    refetchQueries: [
-      { query: GET_LINKS },
-    ]
+    refetchQueries: [{ query: GET_LINKS }],
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -53,48 +46,48 @@ const CreateLinkForm = () => {
 
   const form = useForm({
     initialValues: {
-      title: "",
-      description: "",
-      link: "",
-      public_id: "",
-      secure_url: "",
+      title: '',
+      description: '',
+      link: '',
+      public_id: '',
+      secure_url: '',
     },
   });
 
   useEffect(() => {
     const fileHandler = async () => {
-      if (file.size > 1_500_000) {
-        toast.error("Image size should be less than 1MB");
+      if (file.size > 1_000_000) {
+        toast.error('Image size should be less than 1MB');
         setFile(null);
         return;
       }
 
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", process.env.NEXT_PUBLIC_UPLOAD_PRESET);
-      formData.append("folder", "awesome-link/link/");
+      formData.append('file', file);
+      formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET);
+      formData.append('folder', 'awesome-link/link/');
 
       const promise = axios.post(
-        "https://api.cloudinary.com/v1_1/dhuwajszm/image/upload",
+        'https://api.cloudinary.com/v1_1/dhuwajszm/image/upload',
         formData
       );
 
       setIsImageUploading(true);
 
       toast.promise(promise, {
-        loading: "Uploading...",
+        loading: 'Uploading...',
         success: ({ data }) => {
-          form.setFieldValue("public_id", data.public_id);
-          form.setFieldValue("secure_url", data.secure_url);
+          form.setFieldValue('public_id', data.public_id);
+          form.setFieldValue('secure_url', data.secure_url);
 
           setIsImageUploading(false);
 
-          return "Image uploaded successfully!";
+          return 'Image uploaded successfully!';
         },
         error: () => {
           setIsImageUploading(false);
 
-          return "Please try again..."
+          return 'Please try again...';
         },
       });
     };
@@ -139,18 +132,14 @@ const CreateLinkForm = () => {
             required
             label="Title"
             value={form.values.title}
-            onChange={(event) =>
-              form.setFieldValue("title", event.currentTarget.value)
-            }
+            onChange={(event) => form.setFieldValue('title', event.currentTarget.value)}
           />
 
           <TextInput
             required
             label="Description"
             value={form.values.description}
-            onChange={(event) =>
-              form.setFieldValue("description", event.currentTarget.value)
-            }
+            onChange={(event) => form.setFieldValue('description', event.currentTarget.value)}
             error={form.errors.description && form.errors.description}
           />
 
@@ -158,9 +147,7 @@ const CreateLinkForm = () => {
             required
             label="Link"
             value={form.values.link}
-            onChange={(event) =>
-              form.setFieldValue("link", event.currentTarget.value)
-            }
+            onChange={(event) => form.setFieldValue('link', event.currentTarget.value)}
             error={form.errors.link && form.errors.link}
           />
 
@@ -178,7 +165,6 @@ const CreateLinkForm = () => {
           Create
         </Button>
       </form>
-      <Toaster />
     </>
   );
 };

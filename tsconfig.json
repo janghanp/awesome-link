@@ -2,7 +2,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "target": "es2018" ,
+    "target": "es2018",
     "lib": ["dom", "dom.iterable", "esnext", "es2018", "ESNext.AsyncIterable"],
     "allowJs": true,
     "skipLibCheck": true,

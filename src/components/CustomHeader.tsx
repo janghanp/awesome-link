@@ -11,81 +11,72 @@ import {
   UnstyledButton,
   Text,
   Avatar,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconLogout } from "@tabler/icons";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useCurrentUserState } from "../store";
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconLogout } from '@tabler/icons';
+import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useCurrentUserState } from '../store';
 
-import ToggleThemeButton from "./ToggleThemeButton";
-import UserAvatar from "./UserAvatar";
+import ToggleThemeButton from './ToggleThemeButton';
+import UserAvatar from './UserAvatar';
 
 const useStyles = createStyles((theme) => ({
   link: {
-    display: "flex",
-    alignItems: "center",
-    height: "100%",
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
-    textDecoration: "none",
-    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    textDecoration: 'none',
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
     fontWeight: 500,
     fontSize: theme.fontSizes.sm,
 
-    [theme.fn.smallerThan("sm")]: {
+    [theme.fn.smallerThan('sm')]: {
       height: 42,
-      display: "flex",
-      alignItems: "center",
-      width: "100%",
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
     },
 
     ...theme.fn.hover({
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
+      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
     }),
   },
 
   subLink: {
-    width: "100%",
+    width: '100%',
     padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
     borderRadius: theme.radius.md,
 
     ...theme.fn.hover({
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[7]
-          : theme.colors.gray[0],
+      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
     }),
 
-    "&:active": theme.activeStyles,
+    '&:active': theme.activeStyles,
   },
 
   dropdownFooter: {
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[7]
-        : theme.colors.gray[0],
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
     margin: -theme.spacing.md,
     marginTop: theme.spacing.sm,
     padding: `${theme.spacing.md}px ${theme.spacing.md * 2}px`,
     paddingBottom: theme.spacing.xl,
     borderTop: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1]
+      theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
     }`,
   },
 
   hiddenMobile: {
-    [theme.fn.smallerThan("sm")]: {
-      display: "none",
+    [theme.fn.smallerThan('sm')]: {
+      display: 'none',
     },
   },
 
   hiddenDesktop: {
-    [theme.fn.largerThan("sm")]: {
-      display: "none",
+    [theme.fn.largerThan('sm')]: {
+      display: 'none',
     },
   },
 }));
@@ -95,26 +86,25 @@ const CustomHeader = () => {
 
   const currentUser = useCurrentUserState((state) => state.currentUser);
 
-  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
-    useDisclosure(false);
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
 
   const { classes, theme } = useStyles();
 
   const signOutHandler = () => {
     signOut();
-    router.push("/");
+    router.push('/');
   };
 
   return (
     <Box pb={20}>
       <Header height={60} px="md">
-        <Group position="apart" sx={{ height: "100%" }} px="lg">
-          <UnstyledButton onClick={() => router.push("/")}>
+        <Group position="apart" sx={{ height: '100%' }} px="lg">
+          <UnstyledButton onClick={() => router.push('/')}>
             <Text
               size="md"
               weight="800"
               variant="gradient"
-              gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+              gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
             >
               Awesome-link
             </Text>
@@ -123,12 +113,8 @@ const CustomHeader = () => {
           <Group className={classes.hiddenMobile}>
             <ToggleThemeButton />
 
-            {currentUser && currentUser.role === "ADMIN" && (
-              <Button
-                onClick={() => router.push("/admin")}
-                size="sm"
-                variant="filled"
-              >
+            {currentUser && currentUser.role === 'ADMIN' && (
+              <Button onClick={() => router.push('/admin')} size="sm" variant="filled">
                 Create Link
               </Button>
             )}
@@ -137,39 +123,30 @@ const CustomHeader = () => {
               <UserAvatar image={currentUser.image} name={currentUser.name} />
             ) : (
               <>
-                <Button variant="outline" onClick={() => router.push("/login")}>
+                <Button variant="outline" onClick={() => router.push('/login')}>
                   Log in
                 </Button>
-                <Button onClick={() => router.push("/signup")}>Sign up</Button>
+                <Button onClick={() => router.push('/signup')}>Sign up</Button>
               </>
             )}
           </Group>
 
-          <Burger
-            opened={drawerOpened}
-            onClick={toggleDrawer}
-            className={classes.hiddenDesktop}
-          />
+          <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />
         </Group>
       </Header>
 
       <Drawer
-        styles={{ header: { margin: "0px" } }}
+        styles={{ header: { margin: '0px' } }}
         opened={drawerOpened}
         onClose={closeDrawer}
         size="100%"
         padding="md"
-        title={
-          currentUser ? <Avatar radius="xl" src={currentUser.image} /> : ""
-        }
+        title={currentUser ? <Avatar radius="xl" src={currentUser.image} /> : ''}
         className={classes.hiddenDesktop}
         zIndex={1000000}
       >
-        <ScrollArea sx={{ height: "calc(100vh - 60px)" }} mx="-md">
-          <Divider
-            my="sm"
-            color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-          />
+        <ScrollArea sx={{ height: 'calc(100vh - 60px)' }} mx="-md">
+          <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
           <Group position="center" grow pb="xl" px="md">
             {currentUser ? (
@@ -184,7 +161,7 @@ const CustomHeader = () => {
                 <Button
                   variant="outline"
                   onClick={() => {
-                    router.push("/login");
+                    router.push('/login');
                     closeDrawer();
                   }}
                 >
@@ -192,7 +169,7 @@ const CustomHeader = () => {
                 </Button>
                 <Button
                   onClick={() => {
-                    router.push("/signup");
+                    router.push('/signup');
                     closeDrawer();
                   }}
                 >

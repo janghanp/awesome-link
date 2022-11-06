@@ -1,11 +1,11 @@
-import { Resolver, Query, Arg, Mutation } from "type-graphql";
-import { GraphQLError } from "graphql";
-import bcrypt from "bcryptjs";
-import cloudinary from "cloudinary";
+import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { GraphQLError } from 'graphql';
+import bcrypt from 'bcryptjs';
+import cloudinary from 'cloudinary';
 
-import { User } from "./type";
-import { prisma } from "../../../lib/prisma";
-import { User as UserPrisma } from "@prisma/client";
+import { User } from './type';
+import { prisma } from '../../../lib/prisma';
+import { User as UserPrisma } from '@prisma/client';
 
 @Resolver(User)
 export class UserResolver {
@@ -15,7 +15,7 @@ export class UserResolver {
   }
 
   @Query(() => User)
-  async getUser(@Arg("email") email: string) {
+  async getUser(@Arg('email') email: string) {
     return await prisma.user.findUnique({
       where: {
         email,
@@ -25,9 +25,9 @@ export class UserResolver {
 
   @Mutation(() => User)
   async register(
-    @Arg("email") email: string,
-    @Arg("name") name: string,
-    @Arg("password") password: string
+    @Arg('email') email: string,
+    @Arg('name') name: string,
+    @Arg('password') password: string
   ): Promise<UserPrisma> {
     const user = await prisma.user.findUnique({
       where: {
@@ -36,7 +36,7 @@ export class UserResolver {
     });
 
     if (user) {
-      throw new GraphQLError("The email is already in use");
+      throw new GraphQLError('The email is already in use');
     }
 
     const hashedPasswrod = await bcrypt.hash(password, 12);
@@ -54,9 +54,9 @@ export class UserResolver {
 
   @Mutation(() => User)
   async updateProfile(
-    @Arg("email") email: string,
-    @Arg("image") image: string,
-    @Arg("public_id") public_id: string
+    @Arg('email') email: string,
+    @Arg('image') image: string,
+    @Arg('public_id') public_id: string
   ): Promise<UserPrisma> {
     const user = await prisma.user.findUnique({
       where: {
@@ -90,8 +90,8 @@ export class UserResolver {
 
   @Mutation(() => User)
   async updateUserInfo(
-    @Arg("email") email: string,
-    @Arg("name") name: string
+    @Arg('email') email: string,
+    @Arg('name') name: string
   ): Promise<UserPrisma> {
     const newUser = await prisma.user.update({
       where: {

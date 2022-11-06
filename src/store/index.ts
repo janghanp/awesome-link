@@ -1,6 +1,6 @@
-import create from "zustand";
+import create from 'zustand';
 
-import { User } from "@prisma/client";
+import { User } from '@prisma/client';
 
 type currentUserState = {
   currentUser: User | null;

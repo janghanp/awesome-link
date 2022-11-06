@@ -7,12 +7,12 @@ import {
   Divider,
   Container,
   LoadingOverlay,
-} from "@mantine/core";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { AiOutlineGithub } from "react-icons/ai";
-import LoginForm from "../components/LoginForm";
+} from '@mantine/core';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { AiOutlineGithub } from 'react-icons/ai';
+import LoginForm from '../components/LoginForm';
 
 const SignUp = (props: PaperProps) => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const SignUp = (props: PaperProps) => {
   const { data: session } = useSession();
 
   if (session) {
-    router.push("/");
+    router.push('/');
     return;
   }
 
@@ -37,7 +37,7 @@ const SignUp = (props: PaperProps) => {
             weight="800"
             align="center"
             variant="gradient"
-            gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+            gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
           >
             Welcome to Awesome-link
           </Text>
@@ -47,7 +47,7 @@ const SignUp = (props: PaperProps) => {
               color="dark"
               onClick={() => {
                 setVisible(true);
-                signIn("github", { callbackUrl: "/" });
+                signIn('github', { callbackUrl: '/' });
               }}
               leftIcon={<AiOutlineGithub size={16} />}
             >
@@ -55,11 +55,7 @@ const SignUp = (props: PaperProps) => {
             </Button>
           </Group>
 
-          <Divider
-            label="Or continue with email"
-            labelPosition="center"
-            my="lg"
-          />
+          <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
           <LoginForm type="register" setVisible={setVisible} />
         </Paper>

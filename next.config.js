@@ -12,7 +12,7 @@ const nextConfig = {
   experimental: {
     swcPlugins: [
       [
-        "next-superjson-plugin",
+        'next-superjson-plugin',
         {
           excluded: [],
         },

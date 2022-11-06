@@ -1,19 +1,15 @@
-import { Avatar, ActionIcon } from "@mantine/core";
-import { gql, useMutation } from "@apollo/client";
-import { ChangeEvent, useRef, useState } from "react";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { IconPencil } from "@tabler/icons";
+import { Avatar, ActionIcon } from '@mantine/core';
+import { gql, useMutation } from '@apollo/client';
+import { ChangeEvent, useRef, useState } from 'react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { IconPencil } from '@tabler/icons';
 
-import { User } from "@prisma/client";
-import { useCurrentUserState } from "../store";
+import { User } from '@prisma/client';
+import { useCurrentUserState } from '../store';
 
 const UPDATE_PROFILE = gql`
-  mutation UpdateProfile(
-    $email: String!
-    $image: String!
-    $public_id: String!
-  ) {
+  mutation UpdateProfile($email: String!, $image: String!, $public_id: String!) {
     updateProfile(email: $email, image: $image, public_id: $public_id) {
       id
       name
@@ -33,7 +29,7 @@ const ProfileAvatar = () => {
 
   const { currentUser, setCurrentUser } = useCurrentUserState();
 
-  const [previewImage, setPreviewImage] = useState<string>("");
+  const [previewImage, setPreviewImage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -45,8 +41,8 @@ const ProfileAvatar = () => {
 
     // check file size
     if (file.size > 1_000_000) {
-      toast.error("Image size should be less than 1MB");
-      setPreviewImage("");
+      toast.error('Image size should be less than 1MB');
+      setPreviewImage('');
       setIsLoading(false);
       return;
     }
@@ -60,13 +56,13 @@ const ProfileAvatar = () => {
     reader.readAsDataURL(file);
 
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", process.env.NEXT_PUBLIC_UPLOAD_PRESET);
-    formData.append("folder", "awesome-link/profile/");
+    formData.append('file', file);
+    formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET);
+    formData.append('folder', 'awesome-link/profile/');
 
     try {
       const { data } = await axios.post(
-        "https://api.cloudinary.com/v1_1/dhuwajszm/image/upload",
+        'https://api.cloudinary.com/v1_1/dhuwajszm/image/upload',
         formData
       );
 
@@ -80,10 +76,10 @@ const ProfileAvatar = () => {
 
       setCurrentUser(response.data.updateProfile);
 
-      toast.success("Profile has been updated!");
+      toast.success('Profile has been updated!');
     } catch (error) {
       console.log(error);
-      toast.error("Something went please try again...");
+      toast.error('Something went please try again...');
     } finally {
       setIsLoading(false);
     }
@@ -91,9 +87,9 @@ const ProfileAvatar = () => {
 
   return (
     <>
-      <div style={{ width: 58, position: "relative" }}>
+      <div style={{ width: 58, position: 'relative' }}>
         <Avatar src={previewImage || currentUser.image} size="lg" radius="xl" />
-        <div style={{ position: "absolute", top: "30px", right: "-30px" }}>
+        <div style={{ position: 'absolute', top: '30px', right: '-30px' }}>
           <ActionIcon
             size="md"
             variant="gradient"
@@ -113,7 +109,6 @@ const ProfileAvatar = () => {
         accept=".jpeg, .jpg, .png"
         onChange={changeFileHandler}
       />
-      <Toaster />
     </>
   );
 };

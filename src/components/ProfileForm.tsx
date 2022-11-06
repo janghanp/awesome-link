@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Button, Stack, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useMutation, gql } from "@apollo/client";
-import { useRouter } from "next/router";
+import React, { useState } from 'react';
+import { Button, Stack, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useMutation, gql } from '@apollo/client';
+import { useRouter } from 'next/router';
 
-import { User } from "@prisma/client";
-import { useCurrentUserState } from "../store";
+import { User } from '@prisma/client';
+import { useCurrentUserState } from '../store';
 
 const UPDATE_USER_INFO = gql`
   mutation UpdateUserInfo($email: String!, $name: String!) {
@@ -54,7 +54,7 @@ const ProfileForm = ({ setVisible }: Props) => {
 
     setCurrentUser(response.data.updateUserInfo);
 
-    router.push("/");
+    router.push('/');
   };
 
   return (
@@ -63,18 +63,14 @@ const ProfileForm = ({ setVisible }: Props) => {
         <TextInput
           label="Name"
           value={form.values.name}
-          onChange={(event) =>
-            form.setFieldValue("name", event.currentTarget.value)
-          }
+          onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
         />
 
         <TextInput
           label="Email"
           disabled
           value={form.values.email}
-          onChange={(event) =>
-            form.setFieldValue("email", event.currentTarget.value)
-          }
+          onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
           error={form.errors.email && form.errors.email}
         />
       </Stack>

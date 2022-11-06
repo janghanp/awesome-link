@@ -1,6 +1,6 @@
-import { ObjectType, Field, ID} from "type-graphql";
+import { ObjectType, Field, ID } from 'type-graphql';
 
-@ObjectType({ description: "The link model" })
+@ObjectType({ description: 'The link model' })
 export class Link {
   @Field((_type) => ID)
   id!: number;

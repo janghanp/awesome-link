@@ -124,7 +124,7 @@ const CreateLinkForm = () => {
 
   return (
     <>
-      <LoadingOverlay visible={isLoading} overlayBlur={2} />
+      <LoadingOverlay visible={isLoading} overlayBlur={2} color="dark" />
 
       <form onSubmit={submitHandler}>
         <Stack>
@@ -161,7 +161,7 @@ const CreateLinkForm = () => {
           />
         </Stack>
 
-        <Button loading={isImageUploading} type="submit" mt="lg">
+        <Button loading={isImageUploading} type="submit" mt="lg" color="dark">
           Create
         </Button>
       </form>

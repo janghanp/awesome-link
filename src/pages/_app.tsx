@@ -1,19 +1,23 @@
 import type { AppProps } from 'next/app';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core';
 import { ApolloProvider } from '@apollo/client';
 import { SessionProvider } from 'next-auth/react';
 import { Toaster } from 'react-hot-toast';
 
 import '../../styles/global.css';
-import Layout from '../components/Latyout';
+import Layout from '../components/Layout';
 import apolloClient from '../lib/apollo';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
+  const { state, setState } = useLocalStorage('theme', 'light');
 
-  const toggleColorScheme = (value?: ColorScheme) => {
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(state as ColorScheme);
+
+  const toggleColorScheme = () => {
     setColorScheme((prevState) => (prevState === 'dark' ? 'light' : 'dark'));
+    setState(state === 'dark' ? 'light' : 'dark');
   };
 
   return (

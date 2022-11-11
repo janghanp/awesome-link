@@ -74,7 +74,7 @@ const LinkCard = ({ link }: Props) => {
 
   return (
     <>
-      <LoadingOverlay visible={visible} overlayBlur={2} />
+      <LoadingOverlay visible={visible} overlayBlur={2} color="dark" />
 
       <Card
         shadow="sm"
@@ -90,7 +90,12 @@ const LinkCard = ({ link }: Props) => {
             onClick={(e) => e.preventDefault()}
             style={{ position: 'absolute', top: '10px', right: '15px' }}
           >
-            <ControlMenu deleteLinkHandler={deleteLinkHandler} editLinkHandler={editLinkHanlder} />
+            {currentUser && currentUser.role === 'ADMIN' && (
+              <ControlMenu
+                deleteLinkHandler={deleteLinkHandler}
+                editLinkHandler={editLinkHanlder}
+              />
+            )}
           </div>
         </Card.Section>
 

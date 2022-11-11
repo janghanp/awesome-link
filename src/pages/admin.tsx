@@ -39,7 +39,7 @@ const Admin = () => {
   return (
     <Container size={500}>
       <Paper radius="md" p="xl" withBorder>
-        <Text size="xl" weight="900" align="left" variant="gradient" mb="xl">
+        <Text size="xl" weight="900" align="left" mb="xl">
           Create a link
         </Text>
 

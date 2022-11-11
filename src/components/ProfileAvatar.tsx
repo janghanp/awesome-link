@@ -92,7 +92,7 @@ const ProfileAvatar = () => {
         <div style={{ position: 'absolute', top: '30px', right: '-30px' }}>
           <ActionIcon
             size="md"
-            variant="gradient"
+            variant="outline"
             loading={isLoading}
             onClick={() => inputRef.current.click()}
           >

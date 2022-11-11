@@ -28,17 +28,11 @@ const LogIn = (props: PaperProps) => {
 
   return (
     <>
-      <LoadingOverlay visible={visible} overlayBlur={2} />
+      <LoadingOverlay visible={visible} overlayBlur={2} color="dark" />
 
       <Container size={500}>
         <Paper radius="md" p="xl" withBorder {...props}>
-          <Text
-            size="lg"
-            weight="800"
-            align="center"
-            variant="gradient"
-            gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
-          >
+          <Text size="lg" weight="700" align="center">
             Welcome to Awesome-link
           </Text>
 

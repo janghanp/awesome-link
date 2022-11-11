@@ -141,6 +141,8 @@ const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen }: Props) => {
       onClose={() => setIsEditModalOpen(false)}
       withCloseButton={false}
     >
+      <LoadingOverlay visible={isLoading} overlayBlur={2} color="dark" />
+
       <AspectRatio ratio={1920 / 1080} mb="sm">
         <Image src={previewImage || link.imageUrl} radius="md" alt="image" />
       </AspectRatio>
@@ -193,12 +195,10 @@ const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen }: Props) => {
           />
         </Stack>
 
-        <Button loading={isImageUploading} type="submit" mt="sm">
+        <Button loading={isImageUploading} type="submit" mt="sm" color="dark">
           Edit
         </Button>
       </form>
-
-      <LoadingOverlay visible={isLoading} overlayBlur={2} />
     </Modal>
   );
 };

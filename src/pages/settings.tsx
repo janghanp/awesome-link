@@ -31,7 +31,7 @@ const Settings = () => {
 
   return (
     <>
-      <LoadingOverlay visible={visible} overlayBlur={2} />
+      <LoadingOverlay visible={visible} overlayBlur={2} color="dark" />
 
       <Container size={500}>
         <Stack>

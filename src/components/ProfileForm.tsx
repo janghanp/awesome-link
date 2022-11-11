@@ -75,7 +75,7 @@ const ProfileForm = ({ setVisible }: Props) => {
         />
       </Stack>
 
-      <Button loading={isLoading} type="submit" mt="lg">
+      <Button loading={isLoading} type="submit" mt="lg" color="dark">
         Update
       </Button>
     </form>

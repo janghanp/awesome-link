@@ -140,7 +140,9 @@ const LoginForm = ({ type, setVisible }: Props) => {
             ? 'Already have an account? Login'
             : "Don't have an account? Register"}
         </Anchor>
-        <Button type="submit">{upperFirst(type)}</Button>
+        <Button color="dark" type="submit">
+          {upperFirst(type)}
+        </Button>
       </Group>
     </form>
   );

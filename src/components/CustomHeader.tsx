@@ -100,12 +100,7 @@ const CustomHeader = () => {
       <Header height={60} px="md">
         <Group position="apart" sx={{ height: '100%' }} px="lg">
           <UnstyledButton onClick={() => router.push('/')}>
-            <Text
-              size="md"
-              weight="800"
-              variant="gradient"
-              gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
-            >
+            <Text size="md" weight="700">
               Awesome-link
             </Text>
           </UnstyledButton>
@@ -114,7 +109,7 @@ const CustomHeader = () => {
             <ToggleThemeButton />
 
             {currentUser && currentUser.role === 'ADMIN' && (
-              <Button onClick={() => router.push('/admin')} size="sm" variant="filled">
+              <Button onClick={() => router.push('/admin')} size="sm" variant="filled" color="dark">
                 Create Link
               </Button>
             )}
@@ -123,10 +118,12 @@ const CustomHeader = () => {
               <UserAvatar image={currentUser.image} name={currentUser.name} />
             ) : (
               <>
-                <Button variant="outline" onClick={() => router.push('/login')}>
+                <Button variant="default" color="dark" onClick={() => router.push('/login')}>
                   Log in
                 </Button>
-                <Button onClick={() => router.push('/signup')}>Sign up</Button>
+                <Button color="dark" onClick={() => router.push('/signup')}>
+                  Sign up
+                </Button>
               </>
             )}
           </Group>

@@ -34,18 +34,7 @@ const LinkCardList = () => {
           </>
         ) : (
           data.getLinks.map((link) => {
-            return (
-              <LinkCard
-                key={link.id}
-                link={link}
-                // id={link.id}
-                // title={link.title}
-                // description={link.description}
-                // link={link.url}
-                // imageUrl={link.imageUrl}
-                // public_id={link.public_id}
-              />
-            );
+            return <LinkCard key={link.id} link={link} />;
           })
         )}
       </SimpleGrid>

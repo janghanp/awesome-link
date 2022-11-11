@@ -2,6 +2,7 @@ import { Container } from '@mantine/core';
 
 import LinkCardList from '../components/LinkCardList';
 
+
 export default function Home() {
   return (
     <Container

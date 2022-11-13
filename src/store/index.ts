@@ -1,13 +1,13 @@
 import create from 'zustand';
 
-import { User } from '@prisma/client';
+import { UserWithBookmarks } from '../types';
 
 type currentUserState = {
-  currentUser: User | null;
-  setCurrentUser: (currentUser: User | null) => void;
+  currentUser: UserWithBookmarks | null;
+  setCurrentUser: (currentUser: UserWithBookmarks | null) => void;
 };
 
 export const useCurrentUserState = create<currentUserState>((set) => ({
   currentUser: null,
-  setCurrentUser: (currentUser: User | null) => set({ currentUser }),
+  setCurrentUser: (currentUser: UserWithBookmarks | null) => set({ currentUser }),
 }));

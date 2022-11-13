@@ -11,16 +11,25 @@ import { User as UserPrisma } from '@prisma/client';
 export class UserResolver {
   @Query(() => [User])
   async getUsers() {
-    return await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      include: { bookmarks: true },
+    });
+
+    return users;
   }
 
   @Query(() => User)
   async getUser(@Arg('email') email: string) {
-    return await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },
+      include: {
+        bookmarks: true,
+      },
     });
+
+    return user;
   }
 
   @Mutation(() => User)
@@ -75,11 +84,6 @@ export class UserResolver {
     });
 
     if (user.public_id) {
-      cloudinary.v2.config({
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      });
       //delete a previous image from cloudinary.
       const result = await cloudinary.v2.uploader.destroy(user.public_id);
       console.log(result);
@@ -103,5 +107,29 @@ export class UserResolver {
     });
 
     return newUser;
+  }
+
+  @Mutation(() => User)
+  async bookmark(
+    @Arg('linkId') linkId: string,
+    @Arg('userId') userId: string
+  ): Promise<UserPrisma> {
+    const user = await prisma.user.update({
+      where: {
+        id: parseInt(userId),
+      },
+      data: {
+        bookmarks: {
+          connect: {
+            id: parseInt(linkId),
+          },
+        },
+      },
+      include: {
+        bookmarks: true,
+      },
+    });
+
+    return user;
   }
 }

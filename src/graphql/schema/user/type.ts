@@ -1,5 +1,7 @@
 import { ObjectType, Field, ID, registerEnumType } from 'type-graphql';
 
+import { Link } from '../link/type';
+
 enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER',
@@ -43,4 +45,7 @@ export class User {
 
   @Field({ nullable: true })
   emailVerified!: Date;
+
+  @Field((_type) => [Link], { nullable: true })
+  bookmarks: Link[];
 }

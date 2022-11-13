@@ -15,7 +15,7 @@ const ControlMenu = ({ deleteLinkHandler, editLinkHandler }: Props) => {
       <Menu shadow="md" width={200} position="bottom-end">
         <Menu.Target>
           <ActionIcon>
-            <IconDots color="black" />
+            <IconDots color="gray" />
           </ActionIcon>
         </Menu.Target>
 

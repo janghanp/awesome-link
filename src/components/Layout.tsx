@@ -5,7 +5,7 @@ import { gql, useQuery } from '@apollo/client';
 
 import CustomHeader from './CustomHeader';
 import { useCurrentUserState } from '../store';
-import { User } from '@prisma/client';
+import { UserWithBookmarks } from '../types';
 
 const GET_USER = gql`
   query User($email: String!) {
@@ -15,12 +15,15 @@ const GET_USER = gql`
       email
       image
       role
+      bookmarks {
+        id
+      }
     }
   }
 `;
 
 interface UserData {
-  getUser: User;
+  getUser: UserWithBookmarks;
 }
 
 type Props = {
@@ -30,7 +33,7 @@ type Props = {
 export default function Layout({ children }: Props) {
   const { status, data: session } = useSession();
 
-  const { loading, data, error } = useQuery<UserData>(GET_USER, {
+  const { data } = useQuery<UserData>(GET_USER, {
     variables: { email: session?.user.email },
     skip: !session,
   });

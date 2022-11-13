@@ -109,7 +109,6 @@ const LoginForm = ({ type, setVisible }: Props) => {
           <TextInput
             required
             label="Name"
-            placeholder="Your name"
             value={form.values.name}
             onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
           />
@@ -118,7 +117,6 @@ const LoginForm = ({ type, setVisible }: Props) => {
         <TextInput
           required
           label="Email"
-          placeholder="hello@mantine.dev"
           value={form.values.email}
           onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
           error={form.errors.email && form.errors.email}
@@ -127,7 +125,6 @@ const LoginForm = ({ type, setVisible }: Props) => {
         <PasswordInput
           required
           label="Password"
-          placeholder="Your password"
           value={form.values.password}
           onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
           error={form.errors.password && 'Password should include at least 6 characters'}

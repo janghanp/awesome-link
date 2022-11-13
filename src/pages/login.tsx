@@ -12,7 +12,7 @@ import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { AiOutlineGithub } from 'react-icons/ai';
-import LoginForm from '../components/LoginForm';
+import AuthForm from '../components/AuthForm';
 
 const LogIn = (props: PaperProps) => {
   const router = useRouter();
@@ -51,7 +51,7 @@ const LogIn = (props: PaperProps) => {
 
           <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-          <LoginForm type="login" setVisible={setVisible} />
+          <AuthForm type="login" setVisible={setVisible} />
         </Paper>
       </Container>
     </>

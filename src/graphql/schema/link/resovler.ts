@@ -9,7 +9,11 @@ import { Link as LinkType } from '@prisma/client';
 export class LinkResolver {
   @Query(() => [Link])
   async getLinks(): Promise<LinkType[]> {
-    const links = await prisma.link.findMany();
+    const links = await prisma.link.findMany({
+      include: {
+        users: true,
+      },
+    });
 
     return links;
   }

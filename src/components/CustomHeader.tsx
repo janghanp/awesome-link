@@ -147,7 +147,7 @@ const CustomHeader = () => {
 
           <Group position="center" grow pb="xl" px="md">
             {currentUser ? (
-              <Button onClick={signOutHandler}>
+              <Button onClick={signOutHandler} color="dark">
                 <Group>
                   <IconLogout size={18} />
                   <Text size="md">Log out</Text>

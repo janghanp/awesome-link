@@ -12,6 +12,7 @@ export const GET_LINKS = gql`
       url
       imageUrl
       public_id
+      createdAt
     }
   }
 `;

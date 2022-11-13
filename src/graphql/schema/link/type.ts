@@ -1,5 +1,7 @@
 import { ObjectType, Field, ID } from 'type-graphql';
 
+import { User } from '../user/type';
+
 @ObjectType({ description: 'The link model' })
 export class Link {
   @Field((_type) => ID)
@@ -25,4 +27,7 @@ export class Link {
 
   @Field()
   updatedAt!: Date;
+
+  @Field((_type) => [User], { nullable: true })
+  users: User[];
 }

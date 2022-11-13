@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { GET_LINKS } from '../components/LinkCardList';
+import { GET_LINKS } from '../pages/index';
 
 const CREATE_LINK = gql`
   mutation CreateLink(

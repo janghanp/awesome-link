@@ -14,7 +14,7 @@ import { gql, useMutation } from '@apollo/client';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 
-import { GET_LINKS } from './LinkCardList';
+import { GET_LINKS } from '../pages/index';
 import { useCurrentUserState } from '../store';
 import ControlMenu from './ControlMenu';
 import EditModal from './EditModal';
@@ -87,8 +87,12 @@ const LinkCard = ({ link }: Props) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
+  console.log({link});
+
   const bookmarkdIds = currentUser && currentUser.bookmarks.map((bookmark) => bookmark.id);
+  console.log({ bookmarkdIds });
   const isBookmakred = currentUser && bookmarkdIds.includes(link.id);
+  console.log({ isBookmakred });
 
   const bookmarkHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

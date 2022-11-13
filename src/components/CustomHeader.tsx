@@ -11,9 +11,10 @@ import {
   UnstyledButton,
   Text,
   Avatar,
+  ActionIcon,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconLogout } from '@tabler/icons';
+import { IconLogout, IconBookmarks } from '@tabler/icons';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useCurrentUserState } from '../store';
@@ -115,7 +116,12 @@ const CustomHeader = () => {
             )}
 
             {currentUser ? (
-              <UserAvatar image={currentUser.image} name={currentUser.name} />
+              <>
+                <ActionIcon>
+                  <IconBookmarks onClick={() => router.push('/bookmarks')} />
+                </ActionIcon>
+                <UserAvatar image={currentUser.image} name={currentUser.name} />
+              </>
             ) : (
               <>
                 <Button variant="default" color="dark" onClick={() => router.push('/login')}>

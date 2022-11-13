@@ -18,6 +18,24 @@ export class LinkResolver {
     return links;
   }
 
+  @Query(() => [Link])
+  async bookmarkLinks(@Arg('userId') userId: string): Promise<LinkType[]> {
+    const links = await prisma.link.findMany({
+      where: {
+        users: {
+          some: {
+            id: parseInt(userId),
+          },
+        },
+      },
+      include: {
+        users: true,
+      },
+    });
+
+    return links;
+  }
+
   @Mutation(() => Link)
   async createLink(
     @Arg('title') title: string,

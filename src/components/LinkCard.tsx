@@ -65,13 +65,14 @@ const DELETE_LINK = gql`
 
 type Props = {
   link: Link;
+  refetch?: () => void;
 };
 
 interface UserData {
   bookmark: UserWithBookmarks;
 }
 
-const LinkCard = ({ link }: Props) => {
+const LinkCard = ({ link, refetch }: Props) => {
   const router = useRouter();
 
   const { classes } = useStyles();
@@ -87,12 +88,8 @@ const LinkCard = ({ link }: Props) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
-  console.log({link});
-
   const bookmarkdIds = currentUser && currentUser.bookmarks.map((bookmark) => bookmark.id);
-  console.log({ bookmarkdIds });
   const isBookmakred = currentUser && bookmarkdIds.includes(link.id);
-  console.log({ isBookmakred });
 
   const bookmarkHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -107,6 +104,10 @@ const LinkCard = ({ link }: Props) => {
     });
 
     setCurrentUser(data.bookmark);
+
+    if (refetch) {
+      refetch();
+    }
   };
 
   const deleteLinkHandler = async (cb: React.Dispatch<React.SetStateAction<boolean>>) => {

@@ -23,7 +23,7 @@ interface LinksData {
 }
 
 export default function Home() {
-  const { loading, data } = useQuery<LinksData>(GET_LINKS);
+  const { loading, data, refetch: refetchAllLInks } = useQuery<LinksData>(GET_LINKS);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -38,7 +38,7 @@ export default function Home() {
         flexDirection: 'column',
       }}
     >
-      <LinkCardList links={data.getLinks} />
+      <LinkCardList links={data.getLinks} refetch={refetchAllLInks} />
     </Container>
   );
 }

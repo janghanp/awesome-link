@@ -117,8 +117,8 @@ const CustomHeader = () => {
 
             {currentUser ? (
               <>
-                <ActionIcon>
-                  <IconBookmarks onClick={() => router.push('/bookmarks')} />
+                <ActionIcon onClick={() => router.push('/bookmarks')}>
+                  <IconBookmarks />
                 </ActionIcon>
                 <UserAvatar image={currentUser.image} name={currentUser.name} />
               </>

@@ -27,11 +27,16 @@ interface LinksData {
 const Bookmarks = () => {
   const currentUser = useCurrentUserState((state) => state.currentUser);
 
-  const { loading, data } = useQuery<LinksData>(GET_BOOKMARK_LINKS, {
+  const {
+    loading,
+    data,
+    refetch: refetchBookmarks,
+  } = useQuery<LinksData>(GET_BOOKMARK_LINKS, {
     variables: {
       userId: currentUser.id,
     },
     skip: !currentUser,
+    fetchPolicy: 'no-cache',
   });
 
   if (loading) {
@@ -51,7 +56,7 @@ const Bookmarks = () => {
         Your lists
       </Title>
       <Divider />
-      <LinkCardList links={data.bookmarkLinks} />
+      <LinkCardList links={data.bookmarkLinks} refetch={refetchBookmarks} />
     </Container>
   );
 };

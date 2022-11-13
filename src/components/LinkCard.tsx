@@ -20,6 +20,7 @@ import ControlMenu from './ControlMenu';
 import EditModal from './EditModal';
 import { Link } from '@prisma/client';
 import { useRouter } from 'next/router';
+import { UserWithBookmarks } from '../types';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -30,17 +31,26 @@ const useStyles = createStyles((theme) => ({
       boxShadow: theme.shadows.md,
     },
   },
-
   title: {
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
     fontWeight: 600,
   },
+  bookmark: {
+    color: theme.colors.yellow[6],
+  },
 }));
 
 const BOOKMARK = gql`
-  mutation Bookmark($userId: String!, $linkId: String!) {
-    bookmark(linkId: $linkId, userId: $userId) {
+  mutation Bookmark($userId: String!, $linkId: String!, $isBookmarking: Boolean!) {
+    bookmark(linkId: $linkId, userId: $userId, isBookmarking: $isBookmarking) {
       id
+      name
+      email
+      image
+      role
+      bookmarks {
+        id
+      }
     }
   }
 `;
@@ -57,6 +67,10 @@ type Props = {
   link: Link;
 };
 
+interface UserData {
+  bookmark: UserWithBookmarks;
+}
+
 const LinkCard = ({ link }: Props) => {
   const router = useRouter();
 
@@ -66,11 +80,9 @@ const LinkCard = ({ link }: Props) => {
     refetchQueries: [{ query: GET_LINKS }],
   });
 
-  const [bookmark] = useMutation(BOOKMARK, {
-    refetchQueries: [{ query: GET_LINKS }],
-  });
+  const [bookmark] = useMutation<UserData>(BOOKMARK);
 
-  const currentUser = useCurrentUserState((state) => state.currentUser);
+  const { currentUser, setCurrentUser } = useCurrentUserState();
 
   const [visible, setVisible] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -86,7 +98,11 @@ const LinkCard = ({ link }: Props) => {
       return;
     }
 
-    await bookmark({ variables: { userId: currentUser.id, linkId: link.id } });
+    const { data } = await bookmark({
+      variables: { userId: currentUser.id, linkId: link.id, isBookmarking: !isBookmakred },
+    });
+
+    setCurrentUser(data.bookmark);
   };
 
   const deleteLinkHandler = async (cb: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -134,7 +150,7 @@ const LinkCard = ({ link }: Props) => {
             {format(new Date(link.createdAt), 'eeee dd,yyyy')}
           </Text>
           <ActionIcon onClick={bookmarkHandler}>
-            <IconBookmark color={isBookmakred ? 'yellow' : 'gray'} />
+            <IconBookmark className={isBookmakred ? classes.bookmark : ''} />
           </ActionIcon>
         </Group>
         <Text className={classes.title} mt={5}>

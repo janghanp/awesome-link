@@ -112,15 +112,40 @@ export class UserResolver {
   @Mutation(() => User)
   async bookmark(
     @Arg('linkId') linkId: string,
-    @Arg('userId') userId: string
+    @Arg('userId') userId: string,
+    @Arg('isBookmarking') isBookmarking: boolean
   ): Promise<UserPrisma> {
+    //bookmark
+    if (isBookmarking) {
+      console.log('bookmark');
+      const user = await prisma.user.update({
+        where: {
+          id: parseInt(userId),
+        },
+        data: {
+          bookmarks: {
+            connect: {
+              id: parseInt(linkId),
+            },
+          },
+        },
+        include: {
+          bookmarks: true,
+        },
+      });
+
+      return user;
+    }
+
+    //unbookmark
+    console.log('unbookmark');
     const user = await prisma.user.update({
       where: {
         id: parseInt(userId),
       },
       data: {
         bookmarks: {
-          connect: {
+          disconnect: {
             id: parseInt(linkId),
           },
         },

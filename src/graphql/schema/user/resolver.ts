@@ -81,6 +81,9 @@ export class UserResolver {
         image,
         public_id,
       },
+      include: {
+        bookmarks: true,
+      },
     });
 
     if (user.public_id) {
@@ -103,6 +106,9 @@ export class UserResolver {
       },
       data: {
         name,
+      },
+      include: {
+        bookmarks: true,
       },
     });
 

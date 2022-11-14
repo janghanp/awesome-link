@@ -36,7 +36,7 @@ const Settings = () => {
       <Container size={500}>
         <Stack>
           <ProfileAvatar />
-          <ProfileForm setVisible={setVisible} />
+          <ProfileForm />
         </Stack>
       </Container>
     </>

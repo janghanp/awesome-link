@@ -13,14 +13,13 @@ import { IconBookmark } from '@tabler/icons';
 import { gql, useMutation } from '@apollo/client';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import { useRouter } from 'next/router';
 
-import { GET_LINKS } from '../pages/index';
 import { useCurrentUserState } from '../store';
+import { GET_LINKS } from '../pages/index';
+import { UserWithBookmarks, Link } from '../types';
 import ControlMenu from './ControlMenu';
 import EditModal from './EditModal';
-import { Link } from '@prisma/client';
-import { useRouter } from 'next/router';
-import { UserWithBookmarks } from '../types';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -145,7 +144,7 @@ const LinkCard = ({ link, refetch }: Props) => {
         )}
 
         <AspectRatio ratio={1920 / 1080}>
-          <Image src={link.imageUrl} />
+          <Image src={link.imageUrl} alt="No way!" />
         </AspectRatio>
         <Group
           style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}

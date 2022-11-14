@@ -12,6 +12,7 @@ import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { AiOutlineGithub } from 'react-icons/ai';
+
 import AuthForm from '../components/AuthForm';
 
 const SignUp = (props: PaperProps) => {

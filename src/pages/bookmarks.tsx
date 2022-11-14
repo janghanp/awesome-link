@@ -1,10 +1,9 @@
 import { gql, useQuery } from '@apollo/client';
 import { Container, Divider, Title } from '@mantine/core';
-import { Link } from '@prisma/client';
-import { useSession } from 'next-auth/react';
 
-import LinkCardList from '../components/LinkCardList';
 import { useCurrentUserState } from '../store';
+import { Link } from '../types';
+import LinkCardList from '../components/LinkCardList';
 
 export const GET_BOOKMARK_LINKS = gql`
   query BookmarkLinks($userId: String!) {

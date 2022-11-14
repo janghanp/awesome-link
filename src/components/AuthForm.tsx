@@ -21,7 +21,7 @@ type Props = {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const LoginForm = ({ type, setVisible }: Props) => {
+const AuthForm = ({ type, setVisible }: Props) => {
   const [signup] = useMutation(CREAT_USER);
 
   const router = useRouter();
@@ -45,7 +45,7 @@ const LoginForm = ({ type, setVisible }: Props) => {
       form.setFieldError('email', 'Check your email again');
       form.setFieldError('password', 'Check your password again');
     }
-  }, [router.query.error]);
+  }, [router.query.error, form]);
 
   const clickHandler = () => {
     if (type === 'login') {
@@ -145,4 +145,4 @@ const LoginForm = ({ type, setVisible }: Props) => {
   );
 };
 
-export default LoginForm;
+export default AuthForm;

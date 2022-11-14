@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import { Container } from '@mantine/core';
 
 import LinkCardList from '../components/LinkCardList';
-import { Link } from '@prisma/client';
+import { Link } from '../types';
 
 export const GET_LINKS = gql`
   query GetLinks {

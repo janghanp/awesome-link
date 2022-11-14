@@ -1,6 +1,7 @@
-import { SimpleGrid, Container, Skeleton } from '@mantine/core';
-import { Link } from '@prisma/client';
+import { SimpleGrid, Container } from '@mantine/core';
+
 import LinkCard from './LinkCard';
+import { Link } from '../types';
 
 type Props = {
   links: Link[];

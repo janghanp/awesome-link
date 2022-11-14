@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { IconPencil } from '@tabler/icons';
 
-import { User } from '@prisma/client';
+import { UserWithBookmarks } from '../types';
 import { useCurrentUserState } from '../store';
 
 const UPDATE_PROFILE = gql`
@@ -16,12 +16,15 @@ const UPDATE_PROFILE = gql`
       email
       image
       role
+      bookmarks {
+        id
+      }
     }
   }
 `;
 
 interface UpdateProfileData {
-  updateProfile: User;
+  updateProfile: UserWithBookmarks;
 }
 
 const ProfileAvatar = () => {

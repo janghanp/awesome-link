@@ -16,8 +16,8 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { gql, useMutation } from '@apollo/client';
 
-import { Link } from '@prisma/client';
-import { GET_LINKS } from './LinkCardList';
+import { Link } from '../types';
+import { GET_LINKS } from '../pages/index';
 
 const UPDATE_LINK = gql`
   mutation UpdateLink(

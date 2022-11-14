@@ -4,7 +4,7 @@ import { useForm } from '@mantine/form';
 import { useMutation, gql } from '@apollo/client';
 import { useRouter } from 'next/router';
 
-import { User } from '@prisma/client';
+import { UserWithBookmarks } from '../types';
 import { useCurrentUserState } from '../store';
 
 const UPDATE_USER_INFO = gql`
@@ -15,19 +15,18 @@ const UPDATE_USER_INFO = gql`
       email
       image
       role
+      bookmarks {
+        id
+      }
     }
   }
 `;
 
 interface UpdateUserInfo {
-  updateUserInfo: User;
+  updateUserInfo: UserWithBookmarks;
 }
 
-type Props = {
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const ProfileForm = ({ setVisible }: Props) => {
+const ProfileForm = () => {
   const router = useRouter();
 
   const [updateUserInfo] = useMutation<UpdateUserInfo>(UPDATE_USER_INFO);

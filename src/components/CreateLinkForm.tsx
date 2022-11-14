@@ -95,7 +95,7 @@ const CreateLinkForm = () => {
     if (file) {
       fileHandler();
     }
-  }, [file]);
+  }, [file, form]);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

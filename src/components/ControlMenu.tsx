@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { Menu, ActionIcon, Modal, Divider, Text, Group, Button } from '@mantine/core';
 import { IconTrash, IconEdit, IconDots } from '@tabler/icons';
-import { useState } from 'react';
 
 type Props = {
   deleteLinkHandler: (cb: React.Dispatch<React.SetStateAction<boolean>>) => void;

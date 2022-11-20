@@ -117,6 +117,10 @@ const LinkCard = ({ link, refetch }: Props) => {
     setVisible(false);
     toast.success('Successfully deleted!');
 
+    if (refetch) {
+      refetch();
+    }
+
     cb(false);
   };
 
@@ -167,6 +171,7 @@ const LinkCard = ({ link, refetch }: Props) => {
           link={link}
           isEditModalOpen={isEditModalOpen}
           setIsEditModalOpen={setIsEditModalOpen}
+          refetch={refetch}
         />
       )}
     </>

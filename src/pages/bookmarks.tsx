@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { Container, Divider, Title } from '@mantine/core';
+import { useRouter } from 'next/router';
 
 import { useCurrentUserState } from '../store';
 import { Link } from '../types';
@@ -24,7 +25,14 @@ interface LinksData {
 }
 
 const Bookmarks = () => {
+  const router = useRouter();
+
   const currentUser = useCurrentUserState((state) => state.currentUser);
+
+  if (!currentUser) {
+    router.push('/');
+    return;
+  }
 
   const {
     loading,
@@ -39,7 +47,7 @@ const Bookmarks = () => {
   });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return;
   }
 
   return (

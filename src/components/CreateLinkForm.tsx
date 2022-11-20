@@ -95,7 +95,7 @@ const CreateLinkForm = () => {
     if (file) {
       fileHandler();
     }
-  }, [file, form]);
+  }, [file]);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -113,7 +113,6 @@ const CreateLinkForm = () => {
     })
       .then(async (res) => {
         console.log(res);
-        //refetech here?
       })
       .catch((error) => {
         console.log(error);

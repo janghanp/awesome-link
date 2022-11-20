@@ -17,7 +17,6 @@ import toast from 'react-hot-toast';
 import { gql, useMutation } from '@apollo/client';
 
 import { Link } from '../types';
-import { GET_LINKS } from '../pages/index';
 
 const UPDATE_LINK = gql`
   mutation UpdateLink(
@@ -49,12 +48,11 @@ type Props = {
   link: Link;
   isEditModalOpen: boolean;
   setIsEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch?: () => void;
 };
 
-const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen }: Props) => {
-  const [updateLink] = useMutation(UPDATE_LINK, {
-    refetchQueries: [{ query: GET_LINKS }],
-  });
+const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen, refetch }: Props) => {
+  const [updateLink] = useMutation(UPDATE_LINK);
 
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -133,6 +131,10 @@ const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen }: Props) => {
 
     setIsLoading(false);
     setIsEditModalOpen(false);
+
+    if (refetch) {
+      refetch();
+    }
   };
 
   return (

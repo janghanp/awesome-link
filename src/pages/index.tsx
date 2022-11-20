@@ -26,7 +26,7 @@ export default function Home() {
   const { loading, data, refetch: refetchAllLInks } = useQuery<LinksData>(GET_LINKS);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return;
   }
 
   return (

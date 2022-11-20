@@ -85,7 +85,7 @@ const useStyles = createStyles((theme) => ({
 const CustomHeader = () => {
   const router = useRouter();
 
-  const currentUser = useCurrentUserState((state) => state.currentUser);
+  const { currentUser, setCurrentUser } = useCurrentUserState();
 
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
 
@@ -93,7 +93,7 @@ const CustomHeader = () => {
 
   const signOutHandler = () => {
     signOut();
-    router.push('/');
+    setCurrentUser(null);
   };
 
   return (

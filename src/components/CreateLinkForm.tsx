@@ -43,6 +43,7 @@ const CreateLinkForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string>('');
 
   const form = useForm({
     initialValues: {
@@ -82,6 +83,7 @@ const CreateLinkForm = () => {
 
           setIsImageUploading(false);
 
+          setFileError('');
           return 'Image uploaded successfully!';
         },
         error: () => {
@@ -99,6 +101,11 @@ const CreateLinkForm = () => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!file) {
+      setFileError('Thumbnail image is required');
+      return;
+    }
 
     setIsLoading(true);
 
@@ -154,7 +161,9 @@ const CreateLinkForm = () => {
             required
             value={file}
             onChange={setFile}
+            error={fileError}
             label="Thumbnail"
+            accept=".jpg, .jpeg, .png, .webp"
             placeholder="Upload file (MAX 1MB)"
             icon={<IconUpload size={14} />}
           />

@@ -13,6 +13,9 @@ export class LinkResolver {
       include: {
         users: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     return links;
@@ -30,6 +33,9 @@ export class LinkResolver {
       },
       include: {
         users: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
 

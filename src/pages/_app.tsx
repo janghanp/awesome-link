@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
-import { useEffect, useState } from 'react';
+import Head from 'next/head';
+import { useState } from 'react';
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core';
 import { ApolloProvider } from '@apollo/client';
 import { SessionProvider } from 'next-auth/react';
@@ -21,17 +22,23 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
   };
 
   return (
-    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <SessionProvider session={session}>
-          <ApolloProvider client={apolloClient}>
-            <Layout>
-              <Component {...pageProps} />
-              <Toaster />
-            </Layout>
-          </ApolloProvider>
-        </SessionProvider>
-      </MantineProvider>
-    </ColorSchemeProvider>
+    <>
+      <Head>
+        <title>Awesome Link</title>
+      </Head>
+
+      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+        <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+          <SessionProvider session={session}>
+            <ApolloProvider client={apolloClient}>
+              <Layout>
+                <Component {...pageProps} />
+                <Toaster />
+              </Layout>
+            </ApolloProvider>
+          </SessionProvider>
+        </MantineProvider>
+      </ColorSchemeProvider>
+    </>
   );
 }

@@ -192,7 +192,7 @@ const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen, refetch }: Props
             hidden
             type="file"
             ref={fileInputRef}
-            accept=".jpeg, .jpg, .png"
+            accept=".jpg, .jpeg, .png, .webp"
             onChange={fileChangeHanlder}
           />
         </Stack>

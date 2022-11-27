@@ -60,7 +60,7 @@ const Bookmarks = () => {
       }}
     >
       <Title order={1} mb="md">
-        Your lists
+        Your list
       </Title>
       <Divider />
       <LinkCardList links={data.bookmarkLinks} refetch={refetchBookmarks} />

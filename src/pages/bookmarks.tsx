@@ -63,7 +63,7 @@ const Bookmarks = () => {
         Your list
       </Title>
       <Divider />
-      <LinkCardList links={data.bookmarkLinks} refetch={refetchBookmarks} />
+      {/* <LinkCardList links={data.bookmarkLinks} refetch={refetchBookmarks} /> */}
     </Container>
   );
 };

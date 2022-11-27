@@ -140,6 +140,7 @@ const LinkCard = ({ link, refetch }: Props) => {
         href={link.url}
         className={classes.card}
         withBorder
+        style={{ width: '100%', height: '100%' }}
       >
         {currentUser && currentUser.role === 'ADMIN' && (
           <Group position="right" mb="xs" onClick={(e) => e.preventDefault()}>

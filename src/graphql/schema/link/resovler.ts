@@ -1,24 +1,67 @@
 import { Resolver, Query, Arg, Mutation } from 'type-graphql';
 import cloudinary from 'cloudinary';
 
-import { Link } from './type';
+import { Link, Response } from './type';
 import { prisma } from '../../../lib/prisma';
-import { Link as LinkType } from '@prisma/client';
+import { Link as LinkType } from '../../../types';
 
 @Resolver(Link)
 export class LinkResolver {
-  @Query(() => [Link])
-  async getLinks(): Promise<LinkType[]> {
-    const links = await prisma.link.findMany({
-      include: {
-        users: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+  @Query(() => Response)
+  async getLinks(@Arg('after', { nullable: true }) after: string): Promise<any> {
+    let queryResults = null;
 
-    return links;
+    if (after) {
+      //Following requests after first one.
+      queryResults = await prisma.link.findMany({
+        take: 9,
+        skip: 1,
+        cursor: {
+          id: Number(after),
+        },
+        include: {
+          users: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+    } else {
+      //First reuquest without after
+      queryResults = await prisma.link.findMany({
+        take: 9,
+        include: {
+          users: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+    }
+
+    if (queryResults.length > 0) {
+      const lastLinkInResults = queryResults[queryResults.length - 1];
+
+      const myCursor = lastLinkInResults.id;
+
+      const result = {
+        pageInfo: {
+          endCursor: myCursor,
+          hasNextPage: !(queryResults.length < 9),
+        },
+        edges: queryResults.map((link) => ({ cursor: link.id, node: link })),
+      };
+
+      return result;
+    }
+
+    return {
+      pageInfo: {
+        endCursor: '',
+        hasNextPage: false,
+      },
+      edges: [],
+    };
   }
 
   @Query(() => [Link])

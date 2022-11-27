@@ -13,3 +13,8 @@ export type { User, Link };
 export type LinkWithUsers = Prisma.LinkGetPayload<typeof linkWithUsers>;
 
 export type UserWithBookmarks = Prisma.UserGetPayload<typeof userWithBookmarks>;
+
+export interface LinkWithCursor {
+  cursor: string;
+  node: Link;
+}

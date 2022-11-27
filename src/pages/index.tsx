@@ -27,12 +27,7 @@ export const GET_LINKS = gql`
 `;
 
 export default function Home() {
-  const {
-    loading,
-    data,
-    refetch: refetchAllLInks,
-    fetchMore,
-  } = useQuery(GET_LINKS, {
+  const { loading, data, refetch, fetchMore } = useQuery(GET_LINKS, {
     variables: {
       after: null,
     },
@@ -67,10 +62,10 @@ export default function Home() {
       }}
     >
       <LinkCardList
-        hasNextPage={hasNextPage}
-        loadNextPage={loadNextPage}
         links={data.getLinks.edges}
-        refetch={refetchAllLInks}
+        hasNextPage={hasNextPage}
+        refetch={refetch}
+        loadNextPage={loadNextPage}
       />
     </Container>
   );

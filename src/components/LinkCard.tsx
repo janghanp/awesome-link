@@ -76,9 +76,7 @@ const LinkCard = ({ link, refetch }: Props) => {
 
   const { classes } = useStyles();
 
-  const [deleteLink] = useMutation(DELETE_LINK, {
-    refetchQueries: [{ query: GET_LINKS }],
-  });
+  const [deleteLink] = useMutation(DELETE_LINK);
 
   const [bookmark] = useMutation<UserData>(BOOKMARK);
 
@@ -112,14 +110,36 @@ const LinkCard = ({ link, refetch }: Props) => {
   const deleteLinkHandler = async (cb: React.Dispatch<React.SetStateAction<boolean>>) => {
     setVisible(true);
 
-    await deleteLink({ variables: { id: link.id, public_id: link.public_id } });
+    await deleteLink({
+      variables: { id: link.id, public_id: link.public_id },
+      update: (cache, { data }) => {
+        const deletedCursorId: string = data.deleteLink.id;
+
+        const currentData: any = cache.readQuery({
+          query: GET_LINKS,
+          variables: { after: null },
+        });
+
+        const newEdges = currentData.getLinks.edges.filter(
+          (edge) => edge.cursor !== deletedCursorId
+        );
+
+        cache.writeQuery({
+          query: GET_LINKS,
+          variables: { after: null },
+          data: {
+            getLinks: {
+              edges: newEdges,
+              pageInfo: currentData.getLinks.pageInfo,
+              __typename: 'Response',
+            },
+          },
+        });
+      },
+    });
 
     setVisible(false);
     toast.success('Successfully deleted!');
-
-    if (refetch) {
-      refetch();
-    }
 
     cb(false);
   };

@@ -132,9 +132,9 @@ const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen, refetch }: Props
     setIsLoading(false);
     setIsEditModalOpen(false);
 
-    if (refetch) {
-      refetch();
-    }
+    // if (refetch) {
+    //   refetch();
+    // }
   };
 
   return (

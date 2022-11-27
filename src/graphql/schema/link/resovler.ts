@@ -1,7 +1,7 @@
 import { Resolver, Query, Arg, Mutation } from 'type-graphql';
 import cloudinary from 'cloudinary';
 
-import { Link, Response } from './type';
+import { Link, Response, Edge } from './type';
 import { prisma } from '../../../lib/prisma';
 import { Link as LinkType } from '../../../types';
 
@@ -85,14 +85,14 @@ export class LinkResolver {
     return links;
   }
 
-  @Mutation(() => Link)
+  @Mutation(() => Edge)
   async createLink(
     @Arg('title') title: string,
     @Arg('description') description: string,
     @Arg('url') url: string,
     @Arg('imageUrl') imageUrl: string,
     @Arg('public_id') public_id: string
-  ): Promise<LinkType> {
+  ): Promise<any> {
     const link = await prisma.link.create({
       data: {
         title,
@@ -103,7 +103,14 @@ export class LinkResolver {
       },
     });
 
-    return link;
+    const result = {
+      cursor: link.id,
+      node: link,
+    };
+
+    console.log({ result });
+
+    return result;
   }
 
   @Mutation(() => Link)

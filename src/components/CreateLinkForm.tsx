@@ -24,11 +24,16 @@ const CREATE_LINK = gql`
       imageUrl: $imageUrl
       public_id: $public_id
     ) {
-      id
-      title
-      description
-      url
-      imageUrl
+      cursor
+      node {
+        id
+        title
+        description
+        url
+        imageUrl
+        public_id
+        createdAt
+      }
     }
   }
 `;
@@ -36,9 +41,7 @@ const CREATE_LINK = gql`
 const CreateLinkForm = () => {
   const router = useRouter();
 
-  const [createLink] = useMutation(CREATE_LINK, {
-    refetchQueries: [{ query: GET_LINKS }],
-  });
+  const [createLink] = useMutation(CREATE_LINK);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
@@ -99,7 +102,7 @@ const CreateLinkForm = () => {
     }
   }, [file]);
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!file) {
@@ -109,7 +112,7 @@ const CreateLinkForm = () => {
 
     setIsLoading(true);
 
-    createLink({
+    await createLink({
       variables: {
         title: form.values.title,
         description: form.values.description,
@@ -117,13 +120,29 @@ const CreateLinkForm = () => {
         imageUrl: form.values.secure_url,
         public_id: form.values.public_id,
       },
-    })
-      .then(async (res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      update: (cache, { data }) => {
+        console.log({ data });
+
+        const newEdge = data.createLink;
+
+        const existingGetLinks: any = cache.readQuery({
+          query: GET_LINKS,
+          variables: { after: null },
+        });
+
+        cache.writeQuery({
+          query: GET_LINKS,
+          variables: { after: null },
+          data: {
+            getLinks: {
+              edges: [newEdge, ...existingGetLinks.getLinks.edges],
+              pageInfo: existingGetLinks.getLinks.pageInfo,
+              __typename: 'Response',
+            },
+          },
+        });
+      },
+    });
 
     router.push('/');
   };

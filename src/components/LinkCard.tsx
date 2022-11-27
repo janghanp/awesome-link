@@ -115,12 +115,12 @@ const LinkCard = ({ link, refetch }: Props) => {
       update: (cache, { data }) => {
         const deletedCursorId: string = data.deleteLink.id;
 
-        const currentData: any = cache.readQuery({
+        const existingGetLinks: any = cache.readQuery({
           query: GET_LINKS,
           variables: { after: null },
         });
 
-        const newEdges = currentData.getLinks.edges.filter(
+        const newEdges = existingGetLinks.getLinks.edges.filter(
           (edge) => edge.cursor !== deletedCursorId
         );
 
@@ -130,7 +130,7 @@ const LinkCard = ({ link, refetch }: Props) => {
           data: {
             getLinks: {
               edges: newEdges,
-              pageInfo: currentData.getLinks.pageInfo,
+              pageInfo: existingGetLinks.getLinks.pageInfo,
               __typename: 'Response',
             },
           },

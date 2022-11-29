@@ -150,7 +150,15 @@ const LinkCard = ({ link, refetch }: Props) => {
 
   return (
     <>
-      <LoadingOverlay visible={visible} overlayBlur={2} color="dark" />
+      <LoadingOverlay
+        visible={visible}
+        overlayBlur={2}
+        color="dark"
+        style={{
+          zIndex: '100',
+          position: 'fixed',
+        }}
+      />
 
       <Card
         key={link.title}

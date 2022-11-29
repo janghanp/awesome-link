@@ -64,25 +64,78 @@ export class LinkResolver {
     };
   }
 
-  @Query(() => [Link])
-  async bookmarkLinks(@Arg('userId') userId: string): Promise<LinkType[]> {
-    const links = await prisma.link.findMany({
-      where: {
-        users: {
-          some: {
-            id: parseInt(userId),
+  @Query(() => Response)
+  async getBookmarkLinks(
+    @Arg('userId') userId: string,
+    @Arg('after', { nullable: true }) after: string
+  ): Promise<any> {
+    let queryResults = null;
+
+    if (after) {
+      //Following requests after first one.
+      queryResults = await prisma.link.findMany({
+        where: {
+          users: {
+            some: {
+              id: parseInt(userId),
+            },
           },
         },
-      },
-      include: {
-        users: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+        take: 9,
+        skip: 1,
+        cursor: {
+          id: Number(after),
+        },
+        include: {
+          users: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+    } else {
+      //First reuquest without after
+      queryResults = await prisma.link.findMany({
+        where: {
+          users: {
+            some: {
+              id: parseInt(userId),
+            },
+          },
+        },
+        take: 9,
+        include: {
+          users: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+    }
 
-    return links;
+    if (queryResults.length > 0) {
+      const lastLinkInResults = queryResults[queryResults.length - 1];
+
+      const myCursor = lastLinkInResults.id;
+
+      const result = {
+        pageInfo: {
+          endCursor: myCursor,
+          hasNextPage: !(queryResults.length < 9),
+        },
+        edges: queryResults.map((link) => ({ cursor: link.id, node: link })),
+      };
+
+      return result;
+    }
+
+    return {
+      pageInfo: {
+        endCursor: '',
+        hasNextPage: false,
+      },
+      edges: [],
+    };
   }
 
   @Mutation(() => Edge)

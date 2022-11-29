@@ -8,10 +8,9 @@ type Props = {
   loadNextPage: () => void;
   hasNextPage: boolean;
   links: LinkWithCursor[];
-  refetch?: () => void;
 };
 
-const LinkCardList = ({ links, refetch, loadNextPage, hasNextPage }: Props) => {
+const LinkCardList = ({ links, loadNextPage, hasNextPage }: Props) => {
   const observer = useRef<IntersectionObserver>();
 
   const lastLinkElementRef = useCallback(
@@ -45,13 +44,13 @@ const LinkCardList = ({ links, refetch, loadNextPage, hasNextPage }: Props) => {
             //last element
             return (
               <div key={link.node.id} ref={lastLinkElementRef}>
-                <LinkCard link={link.node} refetch={refetch} />
+                <LinkCard link={link.node} />
               </div>
             );
           } else {
             return (
               <div key={link.node.id}>
-                <LinkCard link={link.node} refetch={refetch} />
+                <LinkCard link={link.node} />
               </div>
             );
           }

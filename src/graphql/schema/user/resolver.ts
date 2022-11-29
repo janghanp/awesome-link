@@ -123,7 +123,6 @@ export class UserResolver {
   ): Promise<UserPrisma> {
     //bookmark
     if (isBookmarking) {
-      console.log('bookmark');
       const user = await prisma.user.update({
         where: {
           id: parseInt(userId),
@@ -143,8 +142,7 @@ export class UserResolver {
       return user;
     }
 
-    //unbookmark
-    console.log('unbookmark');
+    //un-bookmark
     const user = await prisma.user.update({
       where: {
         id: parseInt(userId),

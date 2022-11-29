@@ -3,26 +3,30 @@ import { Container, Divider, Title } from '@mantine/core';
 import { useRouter } from 'next/router';
 
 import { useCurrentUserState } from '../store';
-import { Link } from '../types';
 import LinkCardList from '../components/LinkCardList';
 
 export const GET_BOOKMARK_LINKS = gql`
-  query BookmarkLinks($userId: String!) {
-    bookmarkLinks(userId: $userId) {
-      id
-      title
-      description
-      url
-      imageUrl
-      public_id
-      createdAt
+  query GetBookmarkLinks($userId: String!, $after: String) {
+    getBookmarkLinks(userId: $userId, after: $after) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          title
+          description
+          url
+          imageUrl
+          public_id
+          createdAt
+        }
+      }
     }
   }
 `;
-
-interface LinksData {
-  bookmarkLinks: Link[];
-}
 
 const Bookmarks = () => {
   const router = useRouter();
@@ -34,21 +38,32 @@ const Bookmarks = () => {
     return;
   }
 
-  const {
-    loading,
-    data,
-    refetch: refetchBookmarks,
-  } = useQuery<LinksData>(GET_BOOKMARK_LINKS, {
+  const { loading, data, fetchMore } = useQuery(GET_BOOKMARK_LINKS, {
     variables: {
       userId: currentUser.id,
+      after: null,
     },
     skip: !currentUser,
-    fetchPolicy: 'no-cache',
   });
 
   if (loading) {
     return;
   }
+
+  const { endCursor, hasNextPage } = data.getBookmarkLinks.pageInfo;
+
+  const loadNextPage = async () => {
+    await fetchMore({
+      variables: { after: endCursor },
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        fetchMoreResult.getBookmarkLinks.edges = [
+          ...prevResult.getBookmarkLinks.edges,
+          ...fetchMoreResult.getBookmarkLinks.edges,
+        ];
+        return fetchMoreResult;
+      },
+    });
+  };
 
   return (
     <Container
@@ -60,10 +75,14 @@ const Bookmarks = () => {
       }}
     >
       <Title order={1} mb="md">
-        Your list
+        Bookmarks
       </Title>
       <Divider />
-      {/* <LinkCardList links={data.bookmarkLinks} refetch={refetchBookmarks} /> */}
+      <LinkCardList
+        links={data.getBookmarkLinks.edges}
+        hasNextPage={hasNextPage}
+        loadNextPage={loadNextPage}
+      />
     </Container>
   );
 };

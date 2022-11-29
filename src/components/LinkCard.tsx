@@ -15,8 +15,9 @@ import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 
-import { useCurrentUserState } from '../store';
 import { GET_LINKS } from '../pages/index';
+import { GET_BOOKMARK_LINKS } from '../pages/bookmarks';
+import { useCurrentUserState } from '../store';
 import { UserWithBookmarks, Link } from '../types';
 import ControlMenu from './ControlMenu';
 import EditModal from './EditModal';
@@ -49,6 +50,12 @@ const BOOKMARK = gql`
       role
       bookmarks {
         id
+        title
+        description
+        url
+        imageUrl
+        public_id
+        createdAt
       }
     }
   }
@@ -64,14 +71,13 @@ const DELETE_LINK = gql`
 
 type Props = {
   link: Link;
-  refetch?: () => void;
 };
 
 interface UserData {
   bookmark: UserWithBookmarks;
 }
 
-const LinkCard = ({ link, refetch }: Props) => {
+const LinkCard = ({ link }: Props) => {
   const router = useRouter();
 
   const { classes } = useStyles();
@@ -98,13 +104,51 @@ const LinkCard = ({ link, refetch }: Props) => {
 
     const { data } = await bookmark({
       variables: { userId: currentUser.id, linkId: link.id, isBookmarking: !isBookmakred },
+      update: (cache, { data }) => {
+        const existingGetBookmarkLinks: any = cache.readQuery({
+          query: GET_BOOKMARK_LINKS,
+          variables: {
+            userId: currentUser.id,
+            after: null,
+          },
+        });
+
+        //update getBookmarkLinks cache if it exists in cache.
+        if (existingGetBookmarkLinks) {
+          let newEdges = null;
+
+          if (isBookmakred) {
+            //un-bookmark
+            newEdges = existingGetBookmarkLinks.getBookmarkLinks.edges.filter(
+              (edge) => edge.cursor !== link.id
+            );
+          } else {
+            //bookmark
+            newEdges = data.bookmark.bookmarks.map((node) => {
+              return {
+                node,
+                cursor: node.id,
+                __typename: 'Edge',
+              };
+            });
+          }
+
+          cache.writeQuery({
+            query: GET_BOOKMARK_LINKS,
+            variables: { userId: currentUser.id, after: null },
+            data: {
+              getBookmarkLinks: {
+                edges: newEdges,
+                pageInfo: existingGetBookmarkLinks.getBookmarkLinks.pageInfo,
+                __typename: 'Response',
+              },
+            },
+          });
+        }
+      },
     });
 
     setCurrentUser(data.bookmark);
-
-    if (refetch) {
-      refetch();
-    }
   };
 
   const deleteLinkHandler = async (cb: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -200,7 +244,6 @@ const LinkCard = ({ link, refetch }: Props) => {
           link={link}
           isEditModalOpen={isEditModalOpen}
           setIsEditModalOpen={setIsEditModalOpen}
-          refetch={refetch}
         />
       )}
     </>

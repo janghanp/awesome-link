@@ -48,10 +48,9 @@ type Props = {
   link: Link;
   isEditModalOpen: boolean;
   setIsEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  refetch?: () => void;
 };
 
-const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen, refetch }: Props) => {
+const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen }: Props) => {
   const [updateLink] = useMutation(UPDATE_LINK);
 
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
@@ -131,10 +130,6 @@ const EditModal = ({ link, isEditModalOpen, setIsEditModalOpen, refetch }: Props
 
     setIsLoading(false);
     setIsEditModalOpen(false);
-
-    // if (refetch) {
-    //   refetch();
-    // }
   };
 
   return (

@@ -27,7 +27,7 @@ export const GET_LINKS = gql`
 `;
 
 const Home = () => {
-  const { loading, data, fetchMore } = useQuery(GET_LINKS, {
+  const { loading, data, error, fetchMore } = useQuery(GET_LINKS, {
     variables: {
       after: null,
     },

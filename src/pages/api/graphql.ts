@@ -1,15 +1,15 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import 'reflect-metadata';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ApolloServer } from 'apollo-server-micro';
-import { buildSchema } from 'type-graphql';
+import { readFileSync } from 'fs';
 // @ts-ignore
 import Cors from 'micro-cors';
 import cloudinary from 'cloudinary';
 
 import { createContext } from '../../graphql/context';
-import { UserResolver } from '../../graphql/schema/user/resolver';
-import { LinkResolver } from '../../graphql/schema/link/resovler';
+import { resolvers } from '../../graphql/resolvers';
+
+const typeDefs = readFileSync('./src/graphql/schema.graphql', { encoding: 'utf-8' });
 
 export const config = {
   api: {
@@ -30,12 +30,9 @@ const cors = Cors({
   allowHeaders: ['access-control-allow-credentials', 'access-control-allow-origin', 'content-type'],
 });
 
-const schema = await buildSchema({
-  resolvers: [UserResolver, LinkResolver],
-});
-
 const apolloServer = new ApolloServer({
-  schema,
+  typeDefs,
+  resolvers,
   context: createContext,
 });
 

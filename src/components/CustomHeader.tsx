@@ -163,6 +163,7 @@ const CustomHeader = () => {
               <>
                 <Button
                   variant="outline"
+                  color="dark"
                   onClick={() => {
                     router.push('/login');
                     closeDrawer();
@@ -171,6 +172,7 @@ const CustomHeader = () => {
                   Log in
                 </Button>
                 <Button
+                  color="dark"
                   onClick={() => {
                     router.push('/signup');
                     closeDrawer();

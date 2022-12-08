@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ApolloServer } from 'apollo-server-micro';
+import path from 'path';
 import { readFileSync } from 'fs';
 // @ts-ignore
 import Cors from 'micro-cors';
@@ -9,7 +10,9 @@ import cloudinary from 'cloudinary';
 import { createContext } from '../../graphql/context';
 import { resolvers } from '../../graphql/resolvers';
 
-const typeDefs = readFileSync('./src/graphql/schema.graphql', { encoding: 'utf-8' });
+const filePath = path.join(process.cwd(), "src/graphql", "schema.graphql");
+
+const typeDefs = readFileSync(filePath, { encoding: 'utf-8' });
 
 export const config = {
   api: {

@@ -33,11 +33,6 @@ const Bookmarks = () => {
 
   const currentUser = useCurrentUserState((state) => state.currentUser);
 
-  if (!currentUser) {
-    router.push('/');
-    return;
-  }
-
   const { loading, data, fetchMore } = useQuery(GET_BOOKMARK_LINKS, {
     variables: {
       userId: currentUser.id,
@@ -45,6 +40,11 @@ const Bookmarks = () => {
     },
     skip: !currentUser,
   });
+
+  if (!currentUser) {
+    router.push('/');
+    return;
+  }
 
   if (loading) {
     return;

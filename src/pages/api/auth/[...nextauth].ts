@@ -22,7 +22,8 @@ export default NextAuth({
         name: { label: 'Name', type: 'text', placeholder: 'James' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      //@ts-ignore
+      async authorize(credentials) {
         //sign in
         const user = await prisma.user.findUnique({
           where: {
